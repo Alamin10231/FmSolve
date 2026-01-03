@@ -1,18 +1,26 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import loginImage from "../../assets/images/loginpic.png";
 import logo from "../../assets/logo.png";
 import { Link, Navigate, useNavigate } from "react-router";
+import { AuthContext } from "../../context/AuthProvider";
 
 const Login = () => {
   const navigate = useNavigate();
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
+  const { login } = useContext(AuthContext); 
+   
   const handlebtn = (e) => {
     e.preventDefault();
-
-    console.log("button clicked", email, password);
-    alert("Login Successful");
-    navigate("/");
+login(email, password)
+.then((result)=>console.log(result.user)
+)  
+navigate("/")
+  .catch((error) => {
+        console.log(error.message);
+        alert(error.message);
+      });
+    
   };
   return (
     <>
@@ -83,6 +91,8 @@ const Login = () => {
       {/* Button */}
      
       <button
+
+      onClick={handlebtn}
         type="submit"
         className="w-full py-3 text-lg font-medium text-white transition rounded-xl bg-secondary hover:opacity-90"
       >

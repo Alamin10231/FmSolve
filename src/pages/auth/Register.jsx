@@ -1,39 +1,51 @@
 import React, { useState } from "react";
 import loginImage from "../../assets/images/loginpic.png";
 import logo from "../../assets/logo.png";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { AuthContext } from "../../context/AuthProvider";
+// import { AuthContext } from "../../context/AuthProvider";
 
 export const Register = () => {
   const navigate = useNavigate();
+  const { signup } = useContext(AuthContext); // 🔹 get signup from context
 
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
-
-  const handlebtn = (e) => {
+  const [loading, setLoading] = useState(false);
+const [success, setsuccess] = useState(false);
+  
+  const handlebtn = async (e) => {
     e.preventDefault();
 
-   if(password !== confirmPassword){
-    setError("Passwords do not match");
-    return;
-   }
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
 
     setError("");
-    console.log({
-      fullName,
-      email,
-      password,
-    });
+    setLoading(true);
 
-    // after success
-    navigate("/login");
-  };
+  signup(email,password)
+  .then((result)=>result.user)
+  navigate("/login");
+  setLoading(false);
+  setsuccess(true);
+      alert("Registration Successful! Please Login.")
+   .catch((error) => {
+        console.log(error.message);
+        setsuccess(false);
+        alert(error.message);
+      });
+  }
+   
 
   return (
     <div className="flex min-h-screen bg-purple-500">
-      
+
       {/* Left Side – Image */}
       <div className="items-center justify-center hidden w-1/2 bg-primary md:flex">
         <img
@@ -57,18 +69,15 @@ export const Register = () => {
 
           {/* Sub Text */}
           <p className="text-lg text-gray-600">
-            Get instant access to AI-powered FM insights and executive-ready
-            reports.
+            Get instant access to AI-powered FM insights and executive-ready reports.
           </p>
 
           {/* Form */}
           <form className="space-y-6" onSubmit={handlebtn}>
-            
+
             {/* Full Name */}
             <div>
-              <label className="block mb-2 text-base font-medium">
-                Full Name
-              </label>
+              <label className="block mb-2 text-base font-medium">Full Name</label>
               <input
                 type="text"
                 value={fullName}
@@ -81,9 +90,7 @@ export const Register = () => {
 
             {/* Email */}
             <div>
-              <label className="block mb-2 text-base font-medium">
-                Email
-              </label>
+              <label className="block mb-2 text-base font-medium">Email</label>
               <input
                 type="email"
                 value={email}
@@ -96,9 +103,7 @@ export const Register = () => {
 
             {/* Password */}
             <div>
-              <label className="block mb-2 text-base font-medium">
-                Password
-              </label>
+              <label className="block mb-2 text-base font-medium">Password</label>
               <input
                 type="password"
                 value={password}
@@ -111,9 +116,7 @@ export const Register = () => {
 
             {/* Confirm Password */}
             <div>
-              <label className="block mb-2 text-base font-medium">
-                Confirm Password
-              </label>
+              <label className="block mb-2 text-base font-medium">Confirm Password</label>
               <input
                 type="password"
                 value={confirmPassword}
@@ -125,16 +128,15 @@ export const Register = () => {
             </div>
 
             {/* Error */}
-            {error && (
-              <p className="text-sm text-red-500">{error}</p>
-            )}
+            {error && <p className="text-sm text-red-500">{error}</p>}
 
             {/* Button */}
             <button
               type="submit"
+              disabled={loading}
               className="w-full py-3 text-lg font-medium text-white transition rounded-xl bg-primary hover:opacity-90"
             >
-              Register
+              {loading ? "Registering..." : "Register"}
             </button>
           </form>
 
