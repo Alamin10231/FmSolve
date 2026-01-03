@@ -1,7 +1,16 @@
 import React from 'react'
+import { Outlet } from 'react-router'
 
 export const UserLayout = () => {
   return (
-    <div>UserLayout</div>
+    <div>
+
+
+      <div>
+        <p>topbar</p>
+      
+    
+      </div>
+    </div>
   )
 }

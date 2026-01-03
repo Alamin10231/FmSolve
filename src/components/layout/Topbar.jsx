@@ -54,9 +54,7 @@ const Topbar = () => {
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2">
             <img src={logo} alt="logo" className="h-8" />
-            <span className="text-lg font-semibold text-white">
-              FmSolve
-            </span>
+          
           </Link>
 
           {/* Menu */}

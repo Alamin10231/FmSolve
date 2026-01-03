@@ -47,7 +47,7 @@ const UpdatedPassword = () => {
                   Password
                 </label>
                 <input
-                  type="password"
+                  type="text"
                   value={password}
                   onChange={(e) => setemail(e.target.value)}
                   placeholder="New Password"
@@ -61,7 +61,7 @@ const UpdatedPassword = () => {
                   Password
                 </label>
                 <input
-                  type="password"
+                  type="text"
                   value={password}
                   onChange={(e) => setpassword(e.target.value)}
                   placeholder="Confirm Password"
