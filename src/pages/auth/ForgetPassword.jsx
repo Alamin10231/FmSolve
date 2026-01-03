@@ -6,9 +6,10 @@
 //   )
 // }
 import React, { useState } from "react";
-import loginImage from "../../assets/images/loginpic.png";
+import forgetpassword from "../../assets/images/forgetpassword.png";
 import logo from "../../assets/logo.png";
 import { Link,  useNavigate } from "react-router";
+import { Button } from "@/components/ui/button";
 
  export const ForgetPassword = () => {
   const navigate = useNavigate();
@@ -27,7 +28,7 @@ import { Link,  useNavigate } from "react-router";
         {/* Left Side – Image */}
 
         <div className="items-center justify-center hidden w-1/2 md:flex ">
-          <img src={loginImage} alt="Login" className="object-contain w-3/4 " />
+          <img src={forgetpassword} alt="Forget Password" className="object-contain w-3/4 " />
         </div>
         {/* Right Side – Login Form */}
         
@@ -70,12 +71,12 @@ import { Link,  useNavigate } from "react-router";
          <Link to="/verify-email">
     
 
-      <button
+      <Button
         type="submit"
         className="w-full py-3 my-4 text-lg font-medium text-white transition rounded-xl bg-secondary hover:opacity-90"
       >
         Send
-      </button>
+      </Button>
      </Link>
      
     </form>

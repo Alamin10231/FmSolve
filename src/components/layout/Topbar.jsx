@@ -1,11 +1,10 @@
 import React, { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
-// import { signOut } from "firebase/auth";
-
-// import { Authcontext } from "../context/AuthProvider";
-// import { auth } from "../firebase";
-
-import { MdDashboard } from "react-icons/md";
+import {
+  MdDashboard,
+  MdOutlineDarkMode,
+  MdOutlineLightMode,
+} from "react-icons/md";
 import { FiLogOut, FiLogIn } from "react-icons/fi";
 import { FaChevronDown } from "react-icons/fa";
 
@@ -13,29 +12,36 @@ import logo from "../../assets/logo.png";
 import { AuthContext } from "../../context/AuthProvider";
 import { auth } from "../../firebase/firebase.config";
 import { signOut } from "firebase/auth";
+import { Button } from "../ui/button";
+import { useTheme } from "@/context/ThemeContext";
 
 const menuItems = [
   {
     label: "Services",
     children: [
-      { name: "Web Development", path: "/services/web" },
-      { name: "App Development", path: "/services/app" },
-      { name: "UI/UX Design", path: "/services/ui-ux" },
-      { name: "AI Solutions", path: "/services/ai" },
-      { name: "Cloud Services", path: "/services/cloud" },
-      { name: "Consulting", path: "/services/consulting" },
+      { name: "Operational Delivery", path: "/services/operational-delivery" },
+      { name: "Commercial Strategy", path: "/services/commercial-strategy" },
+      { name: "Supply Chain", path: "/services/supply-chain" },
+      { name: "Operational HR", path: "/services/operational-hr" },
+      { name: "Performance & KPIs", path: "/services/performance-kpis" },
+      { name: "Data & Technology", path: "/services/data-technology" },
+      { name: "Helpdesk", path: "/services/helpdesk" },
+      { name: "Service Delivery", path: "/services/service-delivery" },
+      { name: "Client Service", path: "/services/client-service" },
     ],
   },
   {
     label: "Ask Sam",
     children: [
-      { name: "Finance Help", path: "/ask-sam/finance" },
-      { name: "Business Help", path: "/ask-sam/business" },
+      { name: "Ask Sam", path: "/ask-sam/asksam" },
+      { name: "FM Answers", path: "/ask-sam/fm-answers" },
+      { name: "Stability Reports", path: "/ask-sam/stability-reports" },
     ],
   },
 ];
 
 const Topbar = () => {
+  const { theme, toggleTheme } = useTheme();
   const { user, loading } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -50,16 +56,13 @@ const Topbar = () => {
     <nav className="w-full bg-[#0b0f1a] border-b border-purple-600">
       <div className="px-4 mx-auto max-w-7xl">
         <div className="flex items-center justify-between h-16">
-
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2">
             <img src={logo} alt="logo" className="h-8" />
-          
           </Link>
 
           {/* Menu */}
-          <ul className="flex items-center gap-6 text-sm text-gray-300">
-
+          <ul className="flex items-center gap-6 text-md text-gray-300">
             {/* Dynamic dropdown menus */}
             {menuItems.map((menu) => (
               <li key={menu.label} className="relative group">
@@ -69,11 +72,12 @@ const Topbar = () => {
                 </div>
 
                 {/* Dropdown */}
-                <ul className="absolute left-0 top-full mt-2 w-56 
+                <ul
+                  className="absolute left-0 top-full mt-2 w-56 
                   bg-[#11162a] border border-purple-600 rounded shadow-lg
                   opacity-0 invisible group-hover:opacity-100 group-hover:visible
-                  transition-all duration-200">
-
+                  transition-all duration-200"
+                >
                   {menu.children.map((child) => (
                     <li key={child.name}>
                       <Link
@@ -95,8 +99,18 @@ const Topbar = () => {
             </li>
 
             <li>
+              <Link to="/ourstory" className="hover:text-white">
+                Our Story
+              </Link>
+            </li>
+            <li>
               <Link to="/pricing" className="hover:text-white">
                 Pricing
+              </Link>
+            </li>
+            <li>
+              <Link to="/contact" className="hover:text-white">
+                Contact
               </Link>
             </li>
 
@@ -116,25 +130,43 @@ const Topbar = () => {
 
           {/* Right Side */}
           <div className="flex items-center gap-4">
+            <div>
+              <p className="text-white">FM News</p>
+            </div>
+            <div className="cursor-pointer" onClick={toggleTheme}>
+              {/* <MdOutlineLightMode className="text-white" onClick={toggleTheme} /> */}
+
+              {theme === "light" ? (
+                <MdOutlineLightMode className="text-white text-xl " />
+              ) : (
+                <MdOutlineDarkMode className="text-white text-xl " />
+              )}
+            </div>
             {!user ? (
-              <Link
-                to="/login"
-                className="flex items-center gap-1 bg-purple-600 text-white px-4 py-1.5 rounded"
-              >
-                <FiLogIn />
-                Login
-              </Link>
+              <>
+                <Link
+                  to="/login"
+                  className="flex items-center gap-1  text-white px-4 py-1.5 rounded"
+                >
+                  Login
+                </Link>
+
+                <Button className="bg-blue-500 text-white px-4 py-1.5 rounded">
+                  Connected
+                </Button>
+              </>
             ) : (
-              <button
-                onClick={handleLogout}
-                className="flex items-center gap-1 bg-red-600 text-white px-4 py-1.5 rounded"
-              >
-                <FiLogOut />
-                Logout
-              </button>
+              <>
+                <Button
+                  onClick={handleLogout}
+                  className="flex items-center gap-1 bg-red-600 text-white px-4 py-1.5 rounded"
+                >
+                  <FiLogOut />
+                  Logout
+                </Button>
+              </>
             )}
           </div>
-
         </div>
       </div>
     </nav>

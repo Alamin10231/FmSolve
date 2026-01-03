@@ -1,7 +1,8 @@
 import React from "react";
-import loginImage from "../../assets/images/loginpic.png";
+import loginImage from "../../assets/images/newpassword.png";
 import logo from "../../assets/logo.png";
 import { Link } from "react-router";
+import { Button } from "@/components/ui/button";
 
 export const VerifyEmail = () => {
   return (
@@ -14,7 +15,6 @@ export const VerifyEmail = () => {
       {/* Right Side – OTP Form */}
       <div className="flex items-center justify-center w-full px-10 pb-20 md:w-3/5 pt-28">
         <div className="w-full max-w-lg space-y-5">
-          
           {/* Logo */}
           <img src={logo} alt="Logo" className="mb-4 w-36" />
 
@@ -42,16 +42,14 @@ export const VerifyEmail = () => {
               ))}
             </div>
 
-            
-
             <Link to={"/updatedpassword"}>
-            {/* Button - Height and font matched */}
-            <button
-              type="submit"
-              className="w-full py-3 my-4 text-lg font-medium text-white transition rounded-xl bg-[#f06525] hover:opacity-90"
-            >
-              Send
-            </button>
+              {/* Button - Height and font matched */}
+              <Button
+                type="submit"
+                className="w-full py-3 my-4 text-lg font-medium text-white transition rounded-xl bg-[#f06525] hover:opacity-90"
+              >
+                Send
+              </Button>
             </Link>
           </form>
         </div>

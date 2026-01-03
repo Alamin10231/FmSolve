@@ -1,16 +1,14 @@
-import React from 'react'
-import { Outlet } from 'react-router'
+import React from "react";
+import { Outlet } from "react-router-dom";
+import Topbar from "./Topbar";
+import { Footer } from "./Footer";
 
 export const UserLayout = () => {
   return (
     <div>
-
-
-      <div>
-        <p>topbar</p>
-      
-    
-      </div>
+      <Topbar />
+      <Outlet />
+      <Footer />
     </div>
-  )
-}
+  );
+};

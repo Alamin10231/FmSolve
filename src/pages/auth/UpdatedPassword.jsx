@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import loginImage from "../../assets/images/loginpic.png";
+import loginImage from "../../assets/images/confirm.png";
 import logo from "../../assets/logo.png";
 import { Link, useNavigate } from "react-router";
+import { Button } from "@/components/ui/button";
 
 const UpdatedPassword = () => {
   const navigate = useNavigate();
@@ -71,12 +72,12 @@ const UpdatedPassword = () => {
 
               {/* Button */}
 
-              <button
+              <Button
                 type="submit"
                 className="w-full py-3 text-lg font-medium text-white transition rounded-xl bg-secondary hover:opacity-90"
               >
                 Save
-              </button>
+              </Button>
             </form>
           </div>
         </div>

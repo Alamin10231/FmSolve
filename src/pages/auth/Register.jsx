@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import loginImage from "../../assets/images/loginpic.png";
+import registerImage from "../../assets/images/register.svg";
 import logo from "../../assets/logo.png";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../../context/AuthProvider";
+import { Button } from "@/components/ui/button";
 // import { AuthContext } from "../../context/AuthProvider";
 
 export const Register = () => {
@@ -16,8 +17,7 @@ export const Register = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-const [success, setsuccess] = useState(false);
-  
+
   const handlebtn = async (e) => {
     e.preventDefault();
 
@@ -29,27 +29,23 @@ const [success, setsuccess] = useState(false);
     setError("");
     setLoading(true);
 
-  signup(email,password)
-  .then((result)=>result.user)
-  navigate("/login");
-  setLoading(false);
-  setsuccess(true);
-      alert("Registration Successful! Please Login.")
-   .catch((error) => {
-        console.log(error.message);
-        setsuccess(false);
-        alert(error.message);
-      });
-  }
-   
+    signup(email, password).then((result) => result.user);
+    navigate("/login");
+    setLoading(false);
+
+    alert("Registration Successful! Please Login.").catch((error) => {
+      console.log(error.message);
+
+      alert(error.message);
+    });
+  };
 
   return (
-    <div className="flex min-h-screen bg-purple-500">
-
+    <div className="flex min-h-screen ">
       {/* Left Side – Image */}
-      <div className="items-center justify-center hidden w-1/2 bg-primary md:flex">
+      <div className="items-center justify-center hidden w-1/2  md:flex">
         <img
-          src={loginImage}
+          src={registerImage}
           alt="Register"
           className="object-contain w-3/4"
         />
@@ -58,7 +54,6 @@ const [success, setsuccess] = useState(false);
       {/* Right Side – Form */}
       <div className="flex items-start justify-center w-full px-10 pt-24 pb-20 bg-white md:w-1/2">
         <div className="w-full max-w-lg space-y-4">
-
           {/* Logo */}
           <img src={logo} alt="Logo" className="w-36" />
 
@@ -69,15 +64,17 @@ const [success, setsuccess] = useState(false);
 
           {/* Sub Text */}
           <p className="text-lg text-gray-600">
-            Get instant access to AI-powered FM insights and executive-ready reports.
+            Get instant access to AI-powered FM insights and executive-ready
+            reports.
           </p>
 
           {/* Form */}
           <form className="space-y-6" onSubmit={handlebtn}>
-
             {/* Full Name */}
             <div>
-              <label className="block mb-2 text-base font-medium">Full Name</label>
+              <label className="block mb-2 text-base font-medium">
+                Full Name
+              </label>
               <input
                 type="text"
                 value={fullName}
@@ -103,7 +100,9 @@ const [success, setsuccess] = useState(false);
 
             {/* Password */}
             <div>
-              <label className="block mb-2 text-base font-medium">Password</label>
+              <label className="block mb-2 text-base font-medium">
+                Password
+              </label>
               <input
                 type="password"
                 value={password}
@@ -116,7 +115,9 @@ const [success, setsuccess] = useState(false);
 
             {/* Confirm Password */}
             <div>
-              <label className="block mb-2 text-base font-medium">Confirm Password</label>
+              <label className="block mb-2 text-base font-medium">
+                Confirm Password
+              </label>
               <input
                 type="password"
                 value={confirmPassword}
@@ -131,13 +132,13 @@ const [success, setsuccess] = useState(false);
             {error && <p className="text-sm text-red-500">{error}</p>}
 
             {/* Button */}
-            <button
+            <Button
               type="submit"
               disabled={loading}
               className="w-full py-3 text-lg font-medium text-white transition rounded-xl bg-primary hover:opacity-90"
             >
               {loading ? "Registering..." : "Register"}
-            </button>
+            </Button>
           </form>
 
           {/* Login */}
@@ -147,7 +148,6 @@ const [success, setsuccess] = useState(false);
               Login
             </a>
           </p>
-
         </div>
       </div>
     </div>
