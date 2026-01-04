@@ -53,7 +53,7 @@ const Topbar = () => {
   if (loading) return null;
 
   return (
-    <nav className="w-full bg-[#0b0f1a] border-b border-purple-600">
+    <nav className="w-full bg-[#0b0f1a] border-b border-gray-600">
       <div className="px-4 mx-auto max-w-7xl">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
@@ -62,7 +62,7 @@ const Topbar = () => {
           </Link>
 
           {/* Menu */}
-          <ul className="flex items-center gap-6 text-md text-gray-300">
+          <ul className="flex items-center gap-6 text-gray-300 text-md">
             {/* Dynamic dropdown menus */}
             {menuItems.map((menu) => (
               <li key={menu.label} className="relative group">
@@ -74,7 +74,7 @@ const Topbar = () => {
                 {/* Dropdown */}
                 <ul
                   className="absolute left-0 top-full mt-2 w-56 
-                  bg-[#11162a] border border-purple-600 rounded shadow-lg
+                  bg-[#11162a] border  rounded shadow-lg
                   opacity-0 invisible group-hover:opacity-100 group-hover:visible
                   transition-all duration-200"
                 >
@@ -82,7 +82,7 @@ const Topbar = () => {
                     <li key={child.name}>
                       <Link
                         to={child.path}
-                        className="block px-4 py-2 hover:bg-purple-600 hover:text-white"
+                        className="block px-4 py-2 hover:bg-gray-800 hover:text-white"
                       >
                         {child.name}
                       </Link>
@@ -137,9 +137,9 @@ const Topbar = () => {
               {/* <MdOutlineLightMode className="text-white" onClick={toggleTheme} /> */}
 
               {theme === "light" ? (
-                <MdOutlineLightMode className="text-white text-xl " />
+                <MdOutlineLightMode className="text-xl text-white " />
               ) : (
-                <MdOutlineDarkMode className="text-white text-xl " />
+                <MdOutlineDarkMode className="text-xl text-white " />
               )}
             </div>
             {!user ? (
