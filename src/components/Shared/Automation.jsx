@@ -4,45 +4,12 @@ import { Button } from '../ui/button';
 
 const Automation = () => {
   return (
-    <div className="flex flex-col items-center justify-center 
-      bg-white dark:bg-[#05080d] font-dmSans">
+    <div className="flex flex-col items-center justify-center h-full p-6 transition-colors dark:bg-black">
+      <h1 className="mb-8 font-serif text-2xl italic tracking-wide text-center text-slate-900 dark:text-white md:text-3xl">
+        Work Smarter, Not Harder
+      </h1>
 
-      {/* Handwritten Top Text */}
-      <div className="relative mb-2">
-        <p
-          className="text-gray-500 dark:text-[#94a3b8] text-xl font-medium tracking-wide"
-          style={{ fontFamily: 'cursive', transform: 'rotate(-2deg)' }}
-        >
-          Work Smarter, Not Harder
-        </p>
-
-        {/* Hand-drawn arrow */}
-        <div className="flex justify-center mt-1">
-          <svg
-            width="20"
-            height="30"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            className="text-gray-400 dark:text-[#475569]"
-            strokeWidth="2"
-            strokeLinecap="round"
-          >
-            <path d="M12 2c0 0-2 8 0 12" />
-            <path d="M8 10l4 4 4-4" />
-          </svg>
-        </div>
-      </div>
-
-      {/* Main Card */}
-      <div className="
-        w-[380px] 
-        bg-white dark:bg-[#0a0f18] 
-        border border-gray-200 dark:border-gray-800 
-        p-10 py-20 
-        flex flex-col items-center text-center 
-        shadow-2xl
-      ">
+      <div className="flex flex-col items-center w-full h-full max-w-[400px] p-6 text-center bg-white dark:bg-[#0d1b2a] border border-slate-200 dark:border-slate-800 rounded-2xl md:p-8 transition-colors">
         
         {/* Robot Icon */}
         <div className="flex items-center justify-center w-20 h-20 mb-8 bg-transparent border-2 rounded-full border-cyan-400">
@@ -50,26 +17,18 @@ const Automation = () => {
         </div>
 
         {/* Text Content */}
-        <h3 className="mb-4 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
+        <h2 className="mb-4 text-xl font-bold text-slate-900 dark:text-white md:text-2xl">
           Explore AI Automation
-        </h3>
+        </h2>
 
-        <p className="text-gray-600 dark:text-slate-400 
-          text-[13px] leading-relaxed mb-10 font-medium">
+        <p className="px-2 mb-10 text-base leading-relaxed text-slate-600 dark:text-slate-400 md:text-lg">
           Streamline operations with intelligent automation. Reduce manual tasks and boost team productivity.
         </p>
 
         {/* CTA */}
-        <Button className="
-          w-full relative top-16 
-          bg-[#e65100] hover:bg-[#ff6d00] 
-          text-white py-4 mb-2 
-          rounded-2xl font-bold text-[15px] 
-          flex items-center justify-center gap-2 
-          transition-all active:scale-95 group
-        ">
+        <Button className="flex items-center justify-center w-full px-6 py-5 mt-auto font-semibold text-white transition-all bg-secondary hover:bg-secondary rounded-xl group">
           Learn more
-          <span className="text-xl transition-transform group-hover:translate-x-1">→</span>
+          <span className="ml-2 transition-transform group-hover:translate-x-1">→</span>
         </Button>
       </div>
     </div>

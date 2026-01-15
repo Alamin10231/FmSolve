@@ -39,7 +39,7 @@ const ContactTeam = () => {
         </p>
 
         <Link to="/contact">
-          <Button className="relative flex items-center justify-center w-full px-6 py-5 mt-auto font-semibold text-white transition-all top-40 bg-secondary hover:bg-secondary rounded-xl group">
+          <Button className="flex items-center justify-center w-full px-6 py-5 mt-auto font-semibold text-white transition-all bg-secondary hover:bg-secondary rounded-xl group">
             Contact the Team
             <span className="ml-2 transition-transform group-hover:translate-x-1">
               →

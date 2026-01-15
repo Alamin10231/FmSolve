@@ -86,13 +86,14 @@ const TeamSection = () => {
               </h4>
               <p className="mt-1 mb-4 text-xs font-bold text-gray-500 uppercase">
                 {person.role}
+                
               </p>
               <p className="h-12 text-sm leading-relaxed text-gray-600 dark:text-gray-400">
                 {person.desc}
               </p>
 
               <div className="w-full mt-8">
-                <div className="bg-blue-100 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 py-2 rounded-lg text-[10px] font-bold border border-blue-200 dark:border-blue-500/10 mb-4">
+                <div className="bg-blue-100 dark:bg-blue-900/20 text-black dark:text-blue-400 py-2 rounded-lg text-[10px] font-bold border border-blue-200 dark:border-blue-500/10 mb-4">
                   {person.tag}
                 </div>
                 <button className="w-full bg-[#f15a22] hover:bg-[#d84e1a] text-white py-3 rounded-xl font-bold transition-all">

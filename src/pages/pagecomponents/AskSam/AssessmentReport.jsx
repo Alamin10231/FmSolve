@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   ArrowLeft,
@@ -9,6 +9,7 @@ import {
   CheckCircle2,
   AlertTriangle,
 } from "lucide-react";
+import html2pdf from "html2pdf.js";
 
 const strengthLabel = (score) => {
   if (score >= 85)
@@ -58,12 +59,28 @@ const Card = ({ title, value, subtitle }) => (
 const AssessmentReport = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
+  const reportRef = useRef(null);
   const category = state?.category || "Performance & KPIs";
   const reportName = state?.reportName || `${category} Assessment`;
   const score = Number(state?.score ?? 85);
   // email is present in state but not currently used in this view
 
   const strength = strengthLabel(score);
+
+  const handleDownloadPDF = () => {
+    if (!reportRef.current) return;
+
+    const element = reportRef.current;
+    const opt = {
+      margin: 10,
+      filename: `${reportName.replace(/\s+/g, "_")}.pdf`,
+      image: { type: "jpeg", quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { orientation: "portrait", unit: "mm", format: "a4" },
+    };
+
+    html2pdf().set(opt).from(element).save();
+  };
 
   // Example content arrays; can be made category-specific later
   const diagnosis = [
@@ -127,7 +144,7 @@ const AssessmentReport = () => {
           </div>
         </div>
 
-        <div className="p-6 bg-white border rounded-b-lg shadow-sm dark:bg-slate-900 border-slate-200 dark:border-slate-800">
+        <div ref={reportRef} className="p-6 bg-white border rounded-b-lg shadow-sm dark:bg-slate-900 border-slate-200 dark:border-slate-800">
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-lg font-semibold">{reportName}</h1>
@@ -213,7 +230,7 @@ const AssessmentReport = () => {
                 >
                   <Mail size={16} /> Email Report
                 </a>
-                <button className="inline-flex items-center gap-2 px-3 py-2 text-sm bg-white border rounded hover:bg-slate-50 dark:bg-slate-900 dark:border-slate-700">
+                <button onClick={handleDownloadPDF} className="inline-flex items-center gap-2 px-3 py-2 text-sm bg-white border rounded hover:bg-slate-50 dark:bg-slate-900 dark:border-slate-700">
                   <Download size={16} /> Download PDF
                 </button>
               </div>

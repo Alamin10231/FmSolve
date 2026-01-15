@@ -113,7 +113,7 @@ const TeamLead = () => {
             <h3 className="mb-2 text-3xl font-bold ">{lead.name}</h3>
 
             <div
-              className={`inline-block px-4 py-1.5 rounded-lg  ${lead.chipClass} text-xs text-blue-100
+              className={`inline-block px-4 py-1.5 rounded-lg text-xs text-black dark:text-white dark:${lead.chipClass}
                  font-bold mb-6 border`}
             >
               {lead.tag}

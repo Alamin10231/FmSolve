@@ -16,19 +16,19 @@ import TeamLead from "./pagecomponents/AllService/TeamLead";
 import TransformCTA from "./pagecomponents/AllService/TransformCTA";
 // import Operational from "./pagecomponents/AllService/Operational";
 
-const CHILDREN_BY_SERVICE = {
-  "operational-delivery": [
-    "Mobilisation",
-    "FM Playbooks",
-    "Risk & Compliance",
-    "SOPs & Workflow",
-  ],
-  "commercial-strategy": ["Pricing", "Contract Review", "Margin Improvement"],
-  "supply-chain": ["Contractors", "SLA Management", "Compliance"],
-  "operational-hr": ["Skills Gap", "Training", "Workforce Planning"],
-  "performance-kpis": ["KPI Gaps", "Benchmarking", "Trending"],
-  "data-technology": ["Integrations", "Roadmap", "System Audit"],
-};
+// const CHILDREN_BY_SERVICE = {
+//   "operational-delivery": [
+//     "Mobilisation",
+//     "FM Playbooks",
+//     "Risk & Compliance",
+//     "SOPs & Workflow",
+//   ],
+//   "commercial-strategy": ["Pricing", "Contract Review", "Margin Improvement"],
+//   "supply-chain": ["Contractors", "SLA Management", "Compliance"],
+//   "operational-hr": ["Skills Gap", "Training", "Workforce Planning"],
+//   "performance-kpis": ["KPI Gaps", "Benchmarking", "Trending"],
+//   "data-technology": ["Integrations", "Roadmap", "System Audit"],
+// };
 
 const AllServicepage = () => {
   return (
@@ -47,10 +47,16 @@ const AllServicepage = () => {
       <div>
         <Scrollinlogo></Scrollinlogo>
       </div>
-      <div className="container flex flex-col items-center justify-between gap-6 mx-auto md:flex-row bg-gray-50 dark:bg-black">
-        <ContactTeam></ContactTeam>
-        <Automation></Automation>
-        <AskSamCard></AskSamCard>
+      <div className="container grid items-stretch grid-cols-1 gap-6 md:mx-auto md:grid-cols-3">
+        <div className="h-full">
+          <ContactTeam />
+        </div>
+        <div className="h-full">
+          <Automation></Automation>
+        </div>
+        <div className="h-full">
+          <AskSamCard />
+        </div>
       </div>
       <div>
         <ProcessSection></ProcessSection>
