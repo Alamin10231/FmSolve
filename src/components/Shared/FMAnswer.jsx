@@ -71,7 +71,7 @@ const FMAnswer = () => {
     : questionsData.filter((q) => q.title === activeCategory);
 
   return (
-    <section className="w-full py-12 md:py-16 bg-white dark:bg-[#0f172a] text-slate-900 dark:text-white font-sans transition-colors duration-300">
+    <section className="w-full py-12 md:py-16 my-10 bg-white dark:bg-[#0f172a] text-slate-900 dark:text-white font-sans transition-colors duration-300">
       <div className="px-4 mx-auto md:px-6 max-w-7xl">
         <div className="p-4 mb-8 border md:p-6 border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40 rounded-2xl">
           <h2 className="mb-6 text-lg font-bold md:text-xl">Find answers in 3 simple steps</h2>

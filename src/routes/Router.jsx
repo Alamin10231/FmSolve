@@ -15,6 +15,13 @@ import ReportHistory from "../pages/user/ReportHistory";
 import ReportView from "../pages/user/ReportView";
 import { AdminLayout } from "../components/layout/AdminLayout";
 import { Analystics } from "../pages/admin/Analystics";
+import { Dashboard as AdminDashboard } from "@/pages/admin/Dashboard";
+import { Credits } from "@/pages/admin/Credits";
+import { Reports } from "@/pages/admin/Reports";
+import { KnowledgeBase } from "@/pages/admin/knowledgeBase";
+import { PaymentM } from "@/pages/admin/PaymentM";
+import { FmSolveId } from "@/pages/admin/FmSolveId";
+import { Security } from "@/pages/admin/Security";
 import { Survey } from "../pages/landing/Survey";
 import AllServicepage from "@/pages/AllServicepage";
 import MeetSam from "@/pages/MeetSam";
@@ -32,6 +39,7 @@ import AskSamAnswerDetail from "@/pages/pagecomponents/AskSam/AskSamAnswerDetail
 import AskSamFullAnswer from "@/pages/pagecomponents/AskSam/AskSamFullAnswer";
 import Profile from "@/pages/user/Profile";
 import Setting from "@/pages/user/Setting";
+import UserManagment from "@/pages/admin/UserManagment";
 // jimport StabilityReports from "@/pages/pagecomponents/AskSam/StabilityReports";
 
 export const Router = () => {
@@ -97,8 +105,21 @@ export const Router = () => {
 
         {/* its for admin */}
         <Route element={<AdminLayout />}>
-          <Route path="/admin/dashboard" element={<Dashboard />}></Route>
+          <Route path="/admin/dashboard" element={<AdminDashboard />}></Route>
           <Route path="/admin/analystics" element={<Analystics />}></Route>
+          <Route
+            path="/admin/usermanagment"
+            element={<UserManagment />}
+          ></Route>
+          <Route path="/admin/credits" element={<Credits />}></Route>
+          <Route
+            path="/admin/knowledgeBase"
+            element={<KnowledgeBase />}
+          ></Route>
+          <Route path="/admin/reports" element={<Reports />}></Route>
+          <Route path="/admin/fmsolveid" element={<FmSolveId />}></Route>
+          <Route path="/admin/payment" element={<PaymentM />}></Route>
+          <Route path="/admin/security" element={<Security />}></Route>
         </Route>
       </Routes>
     </BrowserRouter>
