@@ -24,7 +24,11 @@ const AdminSidebar = () => {
     { label: "Dashboard", icon: dashboardIcon, to: "/admin/dashboard" },
     { label: "User Management", icon: usersIcon, to: "/admin/usermanagment" },
     { label: "Payment M.", icon: paymentIcon, to: "/admin/credits" },
-    { label: "Knowledge Base", icon: knowledgeIcon, to: "/admin/knowledgeBase" },
+    {
+      label: "Knowledge Base",
+      icon: knowledgeIcon,
+      to: "/admin/knowledgeBase",
+    },
     { label: "Report Manage.", icon: reportIcon, to: "/admin/reports" },
     { label: "FM Solve ID", icon: fmsolveIdIcon, to: "/admin/fmsolveid" },
   ];
@@ -45,10 +49,20 @@ const AdminSidebar = () => {
         }`
       }
     >
-      <span className="flex items-center justify-center w-5 h-5">
-        <img src={icon} alt={label} className="w-5 h-5" />
-      </span>
-      <span>{label}</span>
+      {({ isActive }) => (
+        <>
+          <span className="flex items-center justify-center w-5 h-5">
+            <img
+              src={icon}
+              alt={label}
+              className={`w-5 h-5 filter ${
+                isActive ? "brightness-0" : "text-white"
+              }`}
+            />
+          </span>
+          <span>{label}</span>
+        </>
+      )}
     </NavLink>
   );
 
@@ -60,7 +74,7 @@ const AdminSidebar = () => {
           <img src={logoSrc} alt="FmSolve" className="h-8" />
         </div>
 
-        <nav className="space-y-2">
+        <nav className={`space-y-2 `}>
           {mainMenu.map((item) => (
             <MenuItem
               key={item.label}
@@ -74,7 +88,7 @@ const AdminSidebar = () => {
 
       {/* Bottom */}
       <div className="space-y-4">
-        <nav className="space-y-2">
+        <nav className="space-y-2 ">
           {secondaryMenu.map((item) => (
             <MenuItem
               key={item.label}
