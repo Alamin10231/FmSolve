@@ -2,24 +2,25 @@ import React from "react";
 import { Outlet } from "react-router-dom";
 import AdminTopbar from "@/pages/admin/AdminTopbar";
 import AdminSidebar from "@/pages/admin/AdminSidebar";
+import { useTheme } from "@/context/ThemeContext";
 
 export const AdminLayout = () => {
+  const { theme } = useTheme();
+  
   return (
-    <div className="flex w-full min-h-screen bg-white">
+    <div className={`flex w-full h-screen ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-50'}`}>
       {/* Sidebar */}
-      <div className="border-r border-gray-200">
-        <AdminSidebar />
-      </div>
+      <AdminSidebar />
 
-     
-      <div className="flex flex-col flex-1 min-w-0">
-        
-        <div className="border-b border-gray-200">
+      {/* Main Content */}
+      <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
+        {/* Topbar */}
+        <div className="flex-shrink-0">
           <AdminTopbar />
         </div>
 
         {/* Routed content */}
-        <main className="flex-1 p-4 overflow-y-auto">
+        <main className={`flex-1 overflow-y-auto ${theme === 'dark' ? 'bg-gray-900' : 'bg-gray-50'}`}>
           <Outlet />
         </main>
       </div>

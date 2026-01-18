@@ -17,11 +17,12 @@ import { AdminLayout } from "../components/layout/AdminLayout";
 import { Analystics } from "../pages/admin/Analystics";
 import { Dashboard as AdminDashboard } from "@/pages/admin/Dashboard";
 import { Credits } from "@/pages/admin/Credits";
-import { Reports } from "@/pages/admin/Reports";
-import { KnowledgeBase } from "@/pages/admin/knowledgeBase";
 import { PaymentM } from "@/pages/admin/PaymentM";
 import { FmSolveId } from "@/pages/admin/FmSolveId";
+import { FsIdDetailPage } from "@/pages/admin/FsIdDetailPage";
 import { Security } from "@/pages/admin/Security";
+import { Profile as AdminProfile } from "@/pages/admin/Profile";
+import { Notifications } from "@/pages/admin/Notifications";
 import { Survey } from "../pages/landing/Survey";
 import AllServicepage from "@/pages/AllServicepage";
 import MeetSam from "@/pages/MeetSam";
@@ -106,18 +107,16 @@ export const Router = () => {
         {/* its for admin */}
         <Route element={<AdminLayout />}>
           <Route path="/admin/dashboard" element={<AdminDashboard />}></Route>
+          <Route path="/admin/profile" element={<AdminProfile />}></Route>
+          <Route path="/admin/notifications" element={<Notifications />}></Route>
           <Route path="/admin/analystics" element={<Analystics />}></Route>
           <Route
             path="/admin/usermanagment"
             element={<UserManagment />}
           ></Route>
           <Route path="/admin/credits" element={<Credits />}></Route>
-          <Route
-            path="/admin/knowledgeBase"
-            element={<KnowledgeBase />}
-          ></Route>
-          <Route path="/admin/reports" element={<Reports />}></Route>
           <Route path="/admin/fmsolveid" element={<FmSolveId />}></Route>
+          <Route path="/admin/fmsolveid/:id" element={<FsIdDetailPage />}></Route>
           <Route path="/admin/payment" element={<PaymentM />}></Route>
           <Route path="/admin/security" element={<Security />}></Route>
         </Route>

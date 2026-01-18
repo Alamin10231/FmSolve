@@ -2,13 +2,6 @@ import React, { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-} from "@/components/ui/select";
-import {
   FiSearch,
   FiEye,
   FiEdit3,
@@ -19,10 +12,10 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useTheme } from "@/context/ThemeContext";
+
 const sampleUsers = [
   {
     fsid: "123564",
@@ -120,6 +113,7 @@ const Chip = ({ label, count, className, onClick }) => (
 );
 
 const UserManagment = () => {
+  const { theme } = useTheme();
   const [users] = useState(sampleUsers);
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState("all");
@@ -166,7 +160,7 @@ const UserManagment = () => {
   const setPageSafe = (p) => setPage(Math.min(Math.max(1, p), pageCount));
 
   return (
-    <div className="flex flex-col w-full gap-6 mx-auto ">
+    <div className={`flex flex-col w-full gap-6 mx-auto p-10 sm:p-6 lg:p-8 ${theme === 'dark' ? 'text-gray-100' : 'text-gray-900'}`}>
       <div className="flex flex-wrap gap-3">
         <Chip
           label="All Users"
@@ -196,20 +190,20 @@ const UserManagment = () => {
 
       {/* Search and sort */}
       <div className="flex items-center justify-between gap-3">
-        <div className="flex items-center w-full max-w-xl gap-2 px-3 py-2 bg-white border rounded-md">
-          <FiSearch className="text-slate-400" />
+        <div className={`flex items-center w-full max-w-xl gap-2 px-3 py-2 ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} border rounded-md focus-within:ring-0`}>
+          <FiSearch className={theme === 'dark' ? 'text-gray-400' : 'text-slate-400'} />
           <Input
-            className="h-8 p-0 text-sm bg-white border-none text-slate-700 placeholder:text-slate-400 focus:ring-0 focus:ring-offset-0"
+            className={`h-8 p-0 text-sm border-none ${theme === 'dark' ? 'bg-gray-800 text-gray-100 placeholder:text-gray-500' : 'bg-white text-slate-700 placeholder:text-slate-400'} focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none focus:ring-0 outline-none`}
             placeholder="User and scenario............."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
           />
         </div>
         <DropdownMenu>
-          <DropdownMenuTrigger className="px-3 py-2 text-sm bg-white border rounded-md">
+          <DropdownMenuTrigger className={`px-3 py-2 text-sm ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-gray-100' : 'bg-white border-gray-200 text-gray-900'} border rounded-md`}>
             Short ▾
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="bg-white">
+          <DropdownMenuContent className={theme === 'dark' ? 'bg-gray-800 border-gray-700 text-gray-100' : 'bg-white'}>
             <DropdownMenuItem onClick={() => setSort("recent")}>
               Recent
             </DropdownMenuItem>
@@ -224,9 +218,9 @@ const UserManagment = () => {
       </div>
 
       {/* Table */}
-      <div className="overflow-x-auto bg-white border rounded-lg border-slate-200">
+      <div className={`overflow-x-auto ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-slate-200'} border rounded-lg`}>
         <table className="min-w-full text-sm">
-          <thead className="bg-slate-100 text-slate-600">
+          <thead className={theme === 'dark' ? 'bg-gray-700 text-gray-300' : 'bg-slate-100 text-slate-600'}>
             <tr>
               <th className="px-4 py-3 text-left">FS-ID</th>
               <th className="px-4 py-3 text-left">Name</th>
@@ -240,29 +234,29 @@ const UserManagment = () => {
             {pageItems.map((u, idx) => (
               <tr
                 key={`${u.fsid}-${idx}`}
-                className="border-t border-slate-200"
+                className={theme === 'dark' ? 'border-t border-gray-700' : 'border-t border-slate-200'}
               >
-                <td className="px-4 py-3 text-slate-700">{u.fsid}</td>
-                <td className="px-4 py-3 text-slate-700">{u.name}</td>
-                <td className="px-4 py-3 text-slate-700">{u.email}</td>
+                <td className={`px-4 py-3 ${theme === 'dark' ? 'text-gray-300' : 'text-slate-700'}`}>{u.fsid}</td>
+                <td className={`px-4 py-3 ${theme === 'dark' ? 'text-gray-300' : 'text-slate-700'}`}>{u.name}</td>
+                <td className={`px-4 py-3 ${theme === 'dark' ? 'text-gray-300' : 'text-slate-700'}`}>{u.email}</td>
                 <td
                   className={`px-4 py-3 font-medium ${statusClass(u.status)}`}
                 >
                   {u.status.charAt(0).toUpperCase() + u.status.slice(1)}
                 </td>
-                <td className="px-4 py-3 text-slate-700">
+                <td className={`px-4 py-3 ${theme === 'dark' ? 'text-gray-300' : 'text-slate-700'}`}>
                   {formatDate(u.joinedAt)}
                 </td>
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-3">
                     <button
-                      className="p-1 text-blue-600 rounded hover:bg-blue-50"
+                      className={`p-1 text-blue-600 rounded ${theme === 'dark' ? 'hover:bg-blue-900' : 'hover:bg-blue-50'}`}
                       aria-label="View"
                     >
                       <FiEye />
                     </button>
                     <button
-                      className="p-1 text-orange-500 rounded hover:bg-orange-50"
+                      className={`p-1 text-orange-500 rounded ${theme === 'dark' ? 'hover:bg-orange-900' : 'hover:bg-orange-50'}`}
                       aria-label="Edit"
                     >
                       <FiEdit3 />
@@ -275,7 +269,7 @@ const UserManagment = () => {
               <tr>
                 <td
                   colSpan={6}
-                  className="px-4 py-6 text-center text-slate-500"
+                  className={`px-4 py-6 text-center ${theme === 'dark' ? 'text-gray-400' : 'text-slate-500'}`}
                 >
                   No users found.
                 </td>
@@ -287,7 +281,7 @@ const UserManagment = () => {
 
       <div className="flex items-center justify-center gap-2">
         <button
-          className="flex items-center justify-center w-8 h-8 border rounded"
+          className={`flex items-center justify-center w-8 h-8 border rounded ${theme === 'dark' ? 'border-gray-700 bg-gray-800 text-gray-300 hover:bg-gray-700' : 'border-gray-200 bg-white text-gray-900 hover:bg-gray-50'}`}
           onClick={() => setPageSafe(page - 1)}
           aria-label="Previous"
         >
@@ -299,7 +293,13 @@ const UserManagment = () => {
             <button
               key={n}
               className={`h-8 w-8 rounded border text-sm ${
-                n === currentPage ? "bg-slate-900 text-white" : "bg-gray-500"
+                n === currentPage 
+                  ? theme === 'dark' 
+                    ? 'bg-blue-600 text-white border-blue-600' 
+                    : 'bg-slate-900 text-white border-slate-900'
+                  : theme === 'dark'
+                  ? 'bg-gray-800 border-gray-700 text-gray-300 hover:bg-gray-700'
+                  : 'bg-white border-gray-200 text-gray-900 hover:bg-gray-50'
               }`}
               onClick={() => setPageSafe(n)}
             >
@@ -310,7 +310,13 @@ const UserManagment = () => {
           <>
             <button
               className={`h-8 w-8 rounded border text-sm ${
-                currentPage === 1 ? "bg-slate-900 text-white" : "bg-white"
+                currentPage === 1 
+                  ? theme === 'dark' 
+                    ? 'bg-blue-600 text-white border-blue-600' 
+                    : 'bg-slate-900 text-white border-slate-900'
+                  : theme === 'dark'
+                  ? 'bg-gray-800 border-gray-700 text-gray-300'
+                  : 'bg-white border-gray-200 text-gray-900'
               }`}
               onClick={() => setPageSafe(1)}
             >
@@ -318,18 +324,28 @@ const UserManagment = () => {
             </button>
             <button
               className={`h-8 w-8 rounded border text-sm ${
-                currentPage === 2 ? "bg-slate-900 text-white" : "bg-white"
+                currentPage === 2 
+                  ? theme === 'dark' 
+                    ? 'bg-blue-600 text-white border-blue-600' 
+                    : 'bg-slate-900 text-white border-slate-900'
+                  : theme === 'dark'
+                  ? 'bg-gray-800 border-gray-700 text-gray-300'
+                  : 'bg-white border-gray-200 text-gray-900'
               }`}
               onClick={() => setPageSafe(2)}
             >
               2
             </button>
-            <span className="flex items-center justify-center w-8 h-8">…</span>
+            <span className={`flex items-center justify-center w-8 h-8 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>…</span>
             <button
               className={`h-8 w-8 rounded border text-sm ${
                 currentPage === pageCount - 1
-                  ? "bg-slate-900 text-white"
-                  : "bg-white"
+                  ? theme === 'dark' 
+                    ? 'bg-blue-600 text-white border-blue-600' 
+                    : 'bg-slate-900 text-white border-slate-900'
+                  : theme === 'dark'
+                  ? 'bg-gray-800 border-gray-700 text-gray-300'
+                  : 'bg-white border-gray-200 text-gray-900'
               }`}
               onClick={() => setPageSafe(pageCount - 1)}
             >
@@ -338,8 +354,12 @@ const UserManagment = () => {
             <button
               className={`h-8 w-8 rounded border text-sm ${
                 currentPage === pageCount
-                  ? "bg-slate-900 text-white"
-                  : "bg-white"
+                  ? theme === 'dark' 
+                    ? 'bg-blue-600 text-white border-blue-600' 
+                    : 'bg-slate-900 text-white border-slate-900'
+                  : theme === 'dark'
+                  ? 'bg-gray-800 border-gray-700 text-gray-300'
+                  : 'bg-white border-gray-200 text-gray-900'
               }`}
               onClick={() => setPageSafe(pageCount)}
             >
@@ -348,7 +368,7 @@ const UserManagment = () => {
           </>
         )}
         <button
-          className="flex items-center justify-center w-8 h-8 border rounded"
+          className={`flex items-center justify-center w-8 h-8 border rounded ${theme === 'dark' ? 'border-gray-700 bg-gray-800 text-gray-300 hover:bg-gray-700' : 'border-gray-200 bg-white text-gray-900 hover:bg-gray-50'}`}
           onClick={() => setPageSafe(page + 1)}
           aria-label="Next"
         >
