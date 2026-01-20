@@ -1,4 +1,4 @@
-    import { defineConfig } from "vite";
+import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
 
@@ -6,11 +6,12 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      "@": path.resolve( "./src"), 
+      "@": path.resolve("./src"),
     },
   },
   server: {
-    port: 3001, 
+    port: 3001,
     host: true,
+    strictPort: true,
   },
 });
