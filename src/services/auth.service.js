@@ -36,7 +36,7 @@ export const authService = {
     const cred = await signInWithPopup(auth, provider);
     await saveTokenFromFirebase();
     return cred.user;
-  },
+  }, 
   me: async () => {
     // Resolve current user or wait for auth state
     if (auth.currentUser) return auth.currentUser;

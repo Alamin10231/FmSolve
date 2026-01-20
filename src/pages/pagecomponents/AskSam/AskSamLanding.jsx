@@ -3,9 +3,9 @@ import bgVideo from "/firevideo.mp4";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search, Sparkles } from "lucide-react";
-// results are rendered on the same page via parent callback
+// Results are rendered by parent via onSearchResult(showResults, hasMatch)
 
-const AskSamLanding = ({ onToggleResults }) => {
+const AskSamLanding = ({ onSearchResult }) => {
   const [query, setQuery] = useState("");
   const [showVideo, setShowVideo] = useState(true);
   const [suggestions, setSuggestions] = useState([]);
@@ -39,14 +39,17 @@ const AskSamLanding = ({ onToggleResults }) => {
     e.preventDefault();
     const trimmed = query.trim().toLowerCase();
     const matched = fakeQuestions.filter((q) =>
-      q.toLowerCase().includes(trimmed)
+      q.toLowerCase().includes(trimmed),
     );
-    if (trimmed && matched.length === 0) {
-      onToggleResults && onToggleResults(true);
-    } else {
+    const has = trimmed && matched.length > 0;
+    // When submitting, show the results area; parent decides what to render
+    onSearchResult && onSearchResult(true, has);
+    // If we have matches, keep suggestions visible; otherwise clear them
+    if (has) {
       setSuggestions(matched.slice(0, 6));
       setShowSuggestions(true);
-      onToggleResults && onToggleResults(false);
+    } else {
+      setShowSuggestions(false);
     }
   };
 
@@ -122,15 +125,15 @@ const AskSamLanding = ({ onToggleResults }) => {
                 setQuery(val);
                 if (val.trim().length > 0) {
                   const matched = fakeQuestions.filter((q) =>
-                    q.toLowerCase().includes(val.trim().toLowerCase())
+                    q.toLowerCase().includes(val.trim().toLowerCase()),
                   );
                   setSuggestions(matched.slice(0, 6));
                   const has = matched.length > 0;
                   setShowSuggestions(has);
-                  if (onToggleResults) onToggleResults(false);
+                  if (onSearchResult) onSearchResult(false, false);
                 } else {
                   setShowSuggestions(false);
-                  if (onToggleResults) onToggleResults(false);
+                  if (onSearchResult) onSearchResult(false, false);
                 }
               }}
               placeholder="Client complaints are increasing"

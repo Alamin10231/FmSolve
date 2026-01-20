@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   FiCheckCircle,
@@ -55,6 +55,12 @@ export const ReportView = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
 
+  const [showBanner, setShowBanner] = useState(true);
+  useEffect(() => {
+    const timer = setTimeout(() => setShowBanner(false), 5000);
+    return () => clearTimeout(timer);
+  }, []);
+
   const report = state || {
     category: "commercial-strategy",
     scenarioId: "poor-warranty-defects-recovery",
@@ -89,13 +95,15 @@ export const ReportView = () => {
 
   return (
     <div className="container px-4 py-6 mx-auto">
-      {/* Email banner */}
-      <div className="flex items-center gap-2 px-3 py-2 mb-4 text-green-700 bg-green-100 border border-green-200 rounded">
-        <FiCheckCircle />
-        <span>
-          Full report sent to: {report.email || "example@company.com"}
-        </span>
-      </div>
+      {/* Email banner (auto-hides after 5s) */}
+      {showBanner && (
+        <div className="flex items-center gap-2 px-3 py-2 mb-4 text-green-700 bg-green-100 border border-green-200 rounded">
+          <FiCheckCircle />
+          <span>
+            Full report sent to: {report.email || "example@company.com"}
+          </span>
+        </div>
+      )}
 
       {/* Header */}
       <div className="flex items-center justify-between mb-3">
@@ -141,7 +149,7 @@ export const ReportView = () => {
               key={d.name}
               className="flex items-center justify-between px-3 py-2 border border-red-200 rounded bg-red-50"
             >
-              <span className="text-sm text-gray-800 dark:text-gray-200">
+              <span className="text-sm text-gray-800 dark:text-black">
                 {d.name}
               </span>
               <Chip>Critical</Chip>
@@ -208,7 +216,7 @@ export const ReportView = () => {
               key={d.name}
               className="flex items-center justify-between px-3 py-2 border border-red-200 rounded bg-red-50"
             >
-              <span className="text-sm text-gray-800 dark:text-gray-200">
+              <span className="text-sm text-gray-800 dark:text-black ">
                 {d.name}
               </span>
               <Chip>Critical</Chip>

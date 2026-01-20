@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import {  LogOut, Menu, X } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { useTheme } from "@/context/ThemeContext";
 
-import logoSrc from "@/assets/images/FmSolve.png";
+
+import logo from "../../assets/logo.png";
 
 // Sidebar icons (semantic names)
 import dashboardIcon from "@/assets/icons/ic_round-dashboard.svg";
@@ -57,7 +58,7 @@ const AdminSidebar = () => {
               src={icon}
               alt={label}
               className={`w-5 h-5 filter ${
-                isActive ? "brightness-0" : "text-white"
+                isActive ? "brightness-0" : "brightness-100"
               }`}
             />
           </span>
@@ -72,7 +73,7 @@ const AdminSidebar = () => {
       {/* Mobile Menu Button */}
       <button
         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-[#0b1220] text-white rounded-md"
+        className="fixed z-50 p-2 text-white rounded-md backdrop-blur-sm lg:hidden top-4 left-4"
       >
         {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
       </button>
@@ -81,7 +82,7 @@ const AdminSidebar = () => {
       {isMobileMenuOpen && (
         <div
           onClick={() => setIsMobileMenuOpen(false)}
-          className="lg:hidden fixed inset-0 bg-black/50 z-40"
+          className="fixed inset-0 z-40 lg:hidden bg-black/50"
         />
       )}
 
@@ -93,8 +94,10 @@ const AdminSidebar = () => {
       >
       {/* Top */}
       <div className="space-y-6">
-        <div className="flex items-center h-12">
-          <img src={logoSrc} alt="FmSolve" className="h-8" />
+        <div className="flex items-center h-12 ml-10 md:ml-0">
+          <Link to="/" className="flex items-center gap-2 ">
+            <img src={logo} alt="logo" className="h-10 bg-transparent " />
+          </Link>
         </div>
 
         <nav className={`space-y-2 `}>
@@ -134,7 +137,7 @@ const AdminSidebar = () => {
         {/* Logout */}
         <button
           onClick={handleLogout}
-          className="flex items-center gap-3 px-3 py-2 text-sm rounded-md text-slate-300 hover:text-white hover:bg-white/10 w-full"
+          className="flex items-center w-full gap-3 px-3 py-2 text-sm rounded-md text-slate-300 hover:text-white hover:bg-white/10"
         >
           <LogOut className="w-4 h-4" />
           <span>Log out</span>

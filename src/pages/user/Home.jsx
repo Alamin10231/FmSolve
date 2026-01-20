@@ -55,16 +55,34 @@ const Home = () => {
             { label: "Reports", value: 0 },
             { label: "Diagnostics", value: 264 },
             { label: "Ideas", value: 9 },
+            // { label: "FM Answers", value: 0 },
+
             { label: "FM Answers", value: 0 },
-          ].map((item, i) => (
-            <div
-              key={i}
-              className="p-4 bg-white dark:bg-[#11162a] border border-gray-200 dark:border-gray-700 rounded-lg"
-            >
-              <p className="text-xs text-gray-500">{item.label}</p>
-              <h3 className="text-xl font-bold text-blue-600">{item.value}</h3>
-            </div>
-          ))}
+          ].map((item, i) => {
+            return item.label === "FM Answers" ? (
+              <Link to="/ask-sam/fm-answers">
+                <div
+                  key={i}
+                  className="p-4 bg-white dark:bg-[#11162a] border border-gray-200 dark:border-gray-700 rounded-lg"
+                >
+                  <p className="text-xs text-gray-500">{item.label}</p>
+                  <h3 className="text-xl font-bold text-blue-600">
+                    {item.value}
+                  </h3>
+                </div>
+              </Link>
+            ) : (
+              <div
+                key={i}
+                className="p-4 bg-white dark:bg-[#11162a] border border-gray-200 dark:border-gray-700 rounded-lg"
+              >
+                <p className="text-xs text-gray-500">{item.label}</p>
+                <h3 className="text-xl font-bold text-blue-600">
+                  {item.value}
+                </h3>
+              </div>
+            );
+          })}
         </div>
 
         {/* Recommended */}
@@ -79,7 +97,7 @@ const Home = () => {
                 >
                   {tag}
                 </span>
-              )
+              ),
             )}
           </div>
         </div>
@@ -112,7 +130,7 @@ const Home = () => {
                 const categoryLabel = (item.category || "").replace(/-/g, " ");
                 const scenarioLabel = (item.scenarioId || "").replace(
                   /-/g,
-                  " "
+                  " ",
                 );
                 return (
                   <button
@@ -154,15 +172,14 @@ const Home = () => {
           )}
         </div>
 
-    
         <div className="p-6 bg-white dark:bg-[#11162a] border border-dashed border-gray-300 dark:border-gray-700 rounded-lg text-center">
           <h3 className="mb-1 font-semibold">No saved questions yet</h3>
           <p className="mb-3 text-sm text-gray-500">No saved questions yet</p>
-         <Link to="/ask-sam/fm-answers">
-          <button className="px-4 py-2 text-sm text-white bg-blue-600 rounded hover:bg-blue-700">
-            Browse FM Answers
-          </button>
-         </Link>
+          <Link to="/ask-sam/fm-answers">
+            <button className="px-4 py-2 text-sm text-white bg-blue-600 rounded hover:bg-blue-700">
+              Browse FM Answers
+            </button>
+          </Link>
         </div>
 
         {/* Run Diagnostic */}
