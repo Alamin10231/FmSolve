@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import {  LogOut, Menu, X } from "lucide-react";
+import { LogOut, Menu, X } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { useTheme } from "@/context/ThemeContext";
-
 
 import logo from "../../assets/logo.png";
 
@@ -24,9 +23,9 @@ const AdminSidebar = () => {
 
   const mainMenu = [
     { label: "Dashboard", icon: dashboardIcon, to: "/admin/dashboard" },
-    { label: "User Management", icon: usersIcon, to: "/admin/usermanagment" },
+    { label: "FM Solve ID", icon: fmsolveIdIcon, to: "/admin/usermanagment" },
     { label: "Payment M.", icon: paymentIcon, to: "/admin/payment" },
-    { label: "FM Solve ID", icon: fmsolveIdIcon, to: "/admin/fmsolveid" },
+    { label: "User Management", icon: usersIcon, to: "/admin/fmsolveid" },
   ];
 
   const secondaryMenu = [
@@ -75,7 +74,11 @@ const AdminSidebar = () => {
         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         className="fixed z-50 p-2 text-white rounded-md backdrop-blur-sm lg:hidden top-4 left-4"
       >
-        {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+        {isMobileMenuOpen ? (
+          <X className="w-6 h-6" />
+        ) : (
+          <Menu className="w-6 h-6" />
+        )}
       </button>
 
       {/* Overlay */}
@@ -89,60 +92,62 @@ const AdminSidebar = () => {
       {/* Sidebar */}
       <aside
         className={`fixed lg:static inset-y-0 left-0 w-64 h-screen bg-[#0b1220] text-white flex flex-col justify-between p-4 overflow-y-auto z-40 transform transition-transform duration-300 ${
-          isMobileMenuOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
+          isMobileMenuOpen
+            ? "translate-x-0"
+            : "-translate-x-full lg:translate-x-0"
         }`}
       >
-      {/* Top */}
-      <div className="space-y-6">
-        <div className="flex items-center h-12 ml-10 md:ml-0">
-          <Link to="/" className="flex items-center gap-2 ">
-            <img src={logo} alt="logo" className="h-10 bg-transparent " />
-          </Link>
+        {/* Top */}
+        <div className="space-y-6">
+          <div className="flex items-center h-12 ml-10 md:ml-0">
+            <Link to="/" className="flex items-center gap-2 ">
+              <img src={logo} alt="logo" className="h-10 bg-transparent " />
+            </Link>
+          </div>
+
+          <nav className={`space-y-2 `}>
+            {mainMenu.map((item) => (
+              <MenuItem
+                key={item.label}
+                to={item.to}
+                label={item.label}
+                icon={item.icon}
+              />
+            ))}
+          </nav>
         </div>
 
-        <nav className={`space-y-2 `}>
-          {mainMenu.map((item) => (
-            <MenuItem
-              key={item.label}
-              to={item.to}
-              label={item.label}
-              icon={item.icon}
-            />
-          ))}
-        </nav>
-      </div>
+        {/* Bottom */}
+        <div className="space-y-4">
+          <nav className="space-y-2 ">
+            {secondaryMenu.map((item) => (
+              <MenuItem
+                key={item.label}
+                to={item.to}
+                label={item.label}
+                icon={item.icon}
+              />
+            ))}
+          </nav>
 
-      {/* Bottom */}
-      <div className="space-y-4">
-        <nav className="space-y-2 ">
-          {secondaryMenu.map((item) => (
-            <MenuItem
-              key={item.label}
-              to={item.to}
-              label={item.label}
-              icon={item.icon}
-            />
-          ))}
-        </nav>
+          {/* Theme switch */}
+          <div className="flex items-center justify-between px-3 py-2 rounded-md">
+            <span className="flex items-center gap-2 text-sm text-slate-300">
+              <img src={themeIcon} alt="Theme" className="w-5 h-5" />
+              Theme
+            </span>
+            <Switch checked={theme === "dark"} onCheckedChange={toggleTheme} />
+          </div>
 
-        {/* Theme switch */}
-        <div className="flex items-center justify-between px-3 py-2 rounded-md">
-          <span className="flex items-center gap-2 text-sm text-slate-300">
-            <img src={themeIcon} alt="Theme" className="w-5 h-5" />
-            Theme
-          </span>
-          <Switch checked={theme === "dark"} onCheckedChange={toggleTheme} />
+          {/* Logout */}
+          <button
+            onClick={handleLogout}
+            className="flex items-center w-full gap-3 px-3 py-2 text-sm rounded-md text-slate-300 hover:text-white hover:bg-white/10"
+          >
+            <LogOut className="w-4 h-4" />
+            <span>Log out</span>
+          </button>
         </div>
-
-        {/* Logout */}
-        <button
-          onClick={handleLogout}
-          className="flex items-center w-full gap-3 px-3 py-2 text-sm rounded-md text-slate-300 hover:text-white hover:bg-white/10"
-        >
-          <LogOut className="w-4 h-4" />
-          <span>Log out</span>
-        </button>
-      </div>
       </aside>
     </>
   );

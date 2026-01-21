@@ -69,7 +69,7 @@ const Setting = () => {
                 <div className="flex items-center gap-4 " type="file">
                   <label className="flex items-center gap-2 px-3 py-1.5 border border-gray-300 rounded-md cursor-pointer dark:bg-black text-sm hover:bg-gray-50 transition-colors">
                     <Camera size={16} />
-                    <span className=" dark:text-black">Change Photo</span>
+                    <span className="text-black  dark:text-white">Change Photo</span>
                     <input type="file" className="hidden" />
                   </label>
                   <span className="text-[10px] text-slate-400 uppercase">

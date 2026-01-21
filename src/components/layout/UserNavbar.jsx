@@ -2,20 +2,41 @@ import { AuthContext } from "@/context/AuthProvider";
 import { User } from "lucide-react";
 import React, { useContext, useState } from "react";
 import { FiGlobe, FiUser, FiSettings, FiLogOut } from "react-icons/fi";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 import logo from "../../assets/logo.png";
+import { useTheme } from "@/context/ThemeContext";
+import whitelogo from "../../assets/images/FmSolve.png";
+
 const UserNavbar = () => {
   const [open, setOpen] = useState(false);
-  const user = useContext(AuthContext);
-  const displayName = user?.displayName || user?.email || "User";
+  const { user } = useContext(AuthContext);
+  const { theme } = useTheme();
+  const displayName =
+    user?.displayName ||
+    user?.providerData?.[0]?.displayName ||
+    user?.email?.split("@")[0] ||
+    "User";
+  const initial = displayName;
   return (
     <header className="w-full bg-white border-b border-gray-200">
       <div className="flex items-center justify-between px-6 py-4">
         {/* Left: Logo */}
         <div className="flex items-center gap-2">
-         <Link to="/" className="flex items-center gap-2 ">
-                     <img src={logo} alt="logo" className="h-10 bg-transparent " />
-                   </Link>
+          <Link to="/" className="flex items-center gap-2 ">
+            {theme === "light" ? (
+              <img
+                src={whitelogo}
+                alt="logo"
+                className="bg-transparent bg-blue-600 "
+              />
+            ) : (
+              <img
+                src={logo}
+                alt="logo"
+                className="bg-transparent bg-blue-600 "
+              />
+            )}
+          </Link>
         </div>
 
         {/* Right: Actions */}
@@ -25,7 +46,7 @@ const UserNavbar = () => {
             <FiGlobe />
             Website
           </button>
-
+          <div className="text-black">{initial}</div>
           {/* Profile */}
           <div className="relative">
             <img

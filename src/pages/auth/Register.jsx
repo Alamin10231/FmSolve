@@ -41,6 +41,7 @@ export const Register = () => {
       alert(error.message);
     });
   };
+  
 
   return (
     <div className="flex min-h-screen ">

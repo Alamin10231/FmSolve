@@ -13,7 +13,7 @@ export const AdminLayout = () => {
       <AdminSidebar />
 
       {/* Main Content */}
-      <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
+      <div className="flex flex-col flex-1 min-w-0 overflow-hidden ">
         {/* Topbar */}
         <div className="flex-shrink-0">
           <AdminTopbar />

@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Search, Sparkles } from "lucide-react";
 import Assesment from "@/components/Shared/Assesment";
 import bgVideo from "/firevideo.mp4";
+import { Link } from "react-router";
 
 const Main = () => {
   const [showVideo, setShowVideo] = useState(true);
@@ -117,9 +118,9 @@ const Main = () => {
                     focus:outline-none
                   "
                 />
-
-                <button
-                  className="
+                <Link to="/ask-sam">
+                  <button
+                    className="
                     flex items-center justify-center gap-2
                     w-full sm:w-auto
                     px-5 py-2.5
@@ -128,10 +129,11 @@ const Main = () => {
                     hover:bg-orange-700
                     whitespace-nowrap
                   "
-                >
-                  <Sparkles size={16} />
-                  Ask Sam
-                </button>
+                  >
+                    <Sparkles size={16} />
+                    Ask Sam
+                  </button>
+                </Link>
               </div>
             </div>
           </div>

@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import loginImage from "../../assets/images/loginpic.png";
 import logo from "../../assets/logo.png";
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthProvider";
 import { Button } from "@/components/ui/button";
 
@@ -16,9 +16,7 @@ const Login = () => {
   const handlebtn = (e) => {
     e.preventDefault();
     login(email, password)
-      .then((result) => {
-        console.log(result.user);
-
+      .then(() => {
         navigate("/");
       })
 
