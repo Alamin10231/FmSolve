@@ -5,7 +5,9 @@ import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../../context/AuthProvider";
 import { Button } from "@/components/ui/button";
+
 // import { AuthContext } from "../../context/AuthProvider";
+// const {theme} = useContext(AuthContext);
 
 export const Register = () => {
   const navigate = useNavigate();
@@ -80,7 +82,7 @@ export const Register = () => {
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 placeholder="Enter your full name"
-                className="w-full px-5 py-3 text-base border rounded-xl focus:ring-2 focus:ring-ring"
+                className="w-full px-5 py-3 text-base border rounded-xl focus:ring-2 focus:ring-ring dark:text-black"
                 required
               />
             </div>
@@ -93,7 +95,7 @@ export const Register = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"
-                className="w-full px-5 py-3 text-base border rounded-xl focus:ring-2 focus:ring-ring"
+                className="w-full px-5 py-3 text-base border rounded-xl focus:ring-2 focus:ring-ring dark:text-black"
                 required
               />
             </div>
@@ -108,7 +110,7 @@ export const Register = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter your password"
-                className="w-full px-5 py-3 text-base border rounded-xl focus:ring-2 focus:ring-ring"
+                className="w-full px-5 py-3 text-base border rounded-xl focus:ring-2 focus:ring-ring dark:text-black"
                 required
               />
             </div>
@@ -123,7 +125,7 @@ export const Register = () => {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 placeholder="Confirm your password"
-                className="w-full px-5 py-3 text-base border rounded-xl focus:ring-2 focus:ring-ring"
+                className="w-full px-5 py-3 text-base border dark:text-black rounded-xl focus:ring-2 focus:ring-ring"
                 required
               />
             </div>
