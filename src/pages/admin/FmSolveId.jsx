@@ -120,7 +120,7 @@ export const FmSolveId = () => {
 
   return (
     <div className="relative min-h-screen p-6 bg-gray-50 dark:bg-gray-900 sm:p-8">
-      <div className="max-w-6xl mx-auto space-y-6">
+      <div className="max-w-6xl mx-auto space-y-6 ">
         {/* Search + Sort */}
         <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
           <div className="flex items-center w-full gap-2 px-3 py-2 bg-white border border-gray-200 rounded-md shadow-sm md:max-w-xl dark:bg-gray-800 dark:border-gray-700">

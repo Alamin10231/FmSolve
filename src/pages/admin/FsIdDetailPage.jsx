@@ -10,7 +10,7 @@ export const FsIdDetailPage = () => {
   const user = { id, name: "Alex Rivers" };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 sm:p-8">
+    <div className="min-h-screen p-4 bg-gray-50 dark:bg-black sm:p-8">
       <FsIdDetail
         user={user}
         isModal={false}
