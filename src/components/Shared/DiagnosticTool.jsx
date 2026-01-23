@@ -132,7 +132,7 @@ const DiagnosticTool = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center px-2 py-6 transition-colors sm:px-4 sm:py-10 dark:bg-slate-950 h-full">
+    <div className="flex flex-col items-center justify-center h-full px-2 py-6 transition-colors sm:px-4 sm:py-10 dark:bg-black">
       <h1 className="mb-6 font-serif text-2xl italic tracking-wide text-center sm:mb-8 sm:text-3xl text-slate-900 dark:text-white">
         Get Straight Answers Fast
       </h1>

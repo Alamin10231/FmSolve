@@ -24,10 +24,16 @@ const Pricing = () => {
       <div><Designed /></div>
       <div><PricingContact /></div>
       <div><Scrollinlogo></Scrollinlogo></div>
-      <div className="container items-center justify-between mx-auto md:flex ">
-        <ContactTeam></ContactTeam>
-        <DiagnosticTool></DiagnosticTool>
-        <AskSamCard></AskSamCard>
+         <div className="container grid items-stretch grid-cols-1 gap-6 md:mx-auto md:grid-cols-3">
+        <div className="h-full">
+          <ContactTeam />
+        </div>
+        <div className="h-full">
+          <DiagnosticTool />
+        </div>
+        <div className="h-full">
+          <AskSamCard />
+        </div>
       </div>
     </div>
   )

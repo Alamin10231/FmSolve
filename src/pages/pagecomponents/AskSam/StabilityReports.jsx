@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Search,
@@ -18,6 +18,8 @@ import TalkToExpert from "./TalkToExpert";
 
 const StabilityReports = () => {
   const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [showSuggestions, setShowSuggestions] = useState(false);
 
   const categories = [
     {
@@ -61,6 +63,21 @@ const StabilityReports = () => {
       subtitle: "Service standards, quality assurance",
     },
   ];
+
+  // Filter categories based on search query
+  const filteredCategories = searchQuery.trim()
+    ? categories.filter(
+        (cat) =>
+          cat.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          cat.subtitle.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : [];
+
+  const handleCategoryClick = (categoryId) => {
+    navigate(`/survey/${categoryId}`);
+    setShowSuggestions(false);
+    setSearchQuery("");
+  };
   return (
     <div className="w-full font-sans bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100">
    
@@ -88,9 +105,52 @@ const StabilityReports = () => {
               size={20}
             />
             <Input
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                setShowSuggestions(e.target.value.trim().length > 0);
+              }}
+              onFocus={() => {
+                if (searchQuery.trim().length > 0) {
+                  setShowSuggestions(true);
+                }
+              }}
+              onBlur={() => {
+                setTimeout(() => setShowSuggestions(false), 200);
+              }}
               placeholder="Search scenarios... e.g. 'contractor performance', 'staff retention', 'SLA issues'"
-              className="w-full pl-12 bg-white border py-7 dark:bg-slate-900 border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-blue-500"
+              className="w-full pl-12 text-black bg-white border dark:text-white py-7 dark:bg-slate-900 border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-blue-500"
             />
+            {showSuggestions && filteredCategories.length > 0 && (
+              <div className="absolute left-0 right-0 top-[calc(100%+8px)] z-50 max-h-80 overflow-y-auto bg-white border shadow-lg rounded-lg dark:bg-slate-900 border-slate-200 dark:border-slate-800">
+                <div className="sticky top-0 px-4 py-2 text-xs font-semibold border-b text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700">
+                  {filteredCategories.length} RESULTS FOUND
+                </div>
+                {filteredCategories.map((cat) => (
+                  <button
+                    key={cat.id}
+                    type="button"
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      handleCategoryClick(cat.id);
+                    }}
+                    className="w-full px-4 py-3 text-left transition border-b hover:bg-slate-50 dark:hover:bg-slate-800 border-slate-100 dark:border-slate-700/50"
+                  >
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex-1">
+                        <h4 className="text-sm font-semibold text-slate-900 dark:text-white">
+                          {cat.title}
+                        </h4>
+                        <p className="mt-1 text-xs text-slate-600 dark:text-slate-400">
+                          {cat.subtitle}
+                        </p>
+                      </div>
+                      <span className="flex-shrink-0 text-slate-400 dark:text-slate-500">→</span>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           <div className="flex flex-wrap justify-center gap-6 text-sm text-slate-500 dark:text-slate-400">
@@ -120,7 +180,7 @@ const StabilityReports = () => {
             {categories.map((cat) => (
               <button
                 key={cat.id}
-                onClick={() => navigate(`/survey/${cat.id}`)}
+                onClick={() => handleCategoryClick(cat.id)}
                 className="p-5 text-left transition bg-white border dark:bg-slate-900 border-slate-200 dark:border-slate-800 rounded-xl hover:border-blue-500"
               >
                 <div className="flex items-start justify-between">

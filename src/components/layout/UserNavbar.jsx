@@ -3,7 +3,7 @@ import { User } from "lucide-react";
 import React, { useContext, useState } from "react";
 import { FiGlobe, FiUser, FiSettings, FiLogOut } from "react-icons/fi";
 import { Link } from "react-router";
-
+import logo from "../../assets/images/FmSolve.png"
 const UserNavbar = () => {
   const [open, setOpen] = useState(false);
   const user = useContext(AuthContext);
@@ -13,9 +13,9 @@ const UserNavbar = () => {
       <div className="flex items-center justify-between px-6 py-4">
         {/* Left: Logo */}
         <div className="flex items-center gap-2">
-          <span className="text-xl font-bold text-blue-700">
-            Fm<span className="text-gray-900">Solve</span>
-          </span>
+       <Link to="/" className="flex items-center gap-2 ">
+                  <img src={logo} alt="logo" className="h-10 bg-transparent " />
+                </Link>
         </div>
 
         {/* Right: Actions */}

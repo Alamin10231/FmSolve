@@ -3,9 +3,10 @@ import bgVideo from "/firevideo.mp4";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search, Sparkles } from "lucide-react";
+import AskSamTools from "./AskSamTools";
 // results are rendered on the same page via parent callback
 
-const AskSamLanding = ({ onToggleResults }) => {
+const AskSamLanding = ({ onSearchResult }) => {
   const [query, setQuery] = useState("");
   const [showVideo, setShowVideo] = useState(true);
   const [suggestions, setSuggestions] = useState([]);
@@ -38,22 +39,27 @@ const AskSamLanding = ({ onToggleResults }) => {
   const handleAsk = (e) => {
     e.preventDefault();
     const trimmed = query.trim().toLowerCase();
+    if (!trimmed) return;
+
     const matched = fakeQuestions.filter((q) =>
       q.toLowerCase().includes(trimmed)
     );
-    if (trimmed && matched.length === 0) {
-      onToggleResults && onToggleResults(true);
+
+    if (matched.length > 0) {
+      // Match found - show AskSamStaticResults
+      onSearchResult && onSearchResult(true, true);
+      setShowSuggestions(false);
     } else {
-      setSuggestions(matched.slice(0, 6));
-      setShowSuggestions(true);
-      onToggleResults && onToggleResults(false);
+      // No match - show Notmatchtext
+      onSearchResult && onSearchResult(true, false);
+      setShowSuggestions(false);
     }
   };
 
   return (
     <section
       className={
-        `relative overflow-hidden w-full min-h-[80vh] py-24 ` +
+        `relative overflow-hidden w-full min-h-[60vh] py-24  ` +
         (showVideo
           ? `bg-white/50 text-white backdrop-blur-sm dark:bg-[#0b0f1a]/70 dark:text-white dark:backdrop-blur-sm`
           : `bg-white text-gray-900 dark:bg-[#0b0f1a] dark:text-white`)
@@ -127,10 +133,10 @@ const AskSamLanding = ({ onToggleResults }) => {
                   setSuggestions(matched.slice(0, 6));
                   const has = matched.length > 0;
                   setShowSuggestions(has);
-                  if (onToggleResults) onToggleResults(false);
+                  if (onSearchResult) onSearchResult(false, false);
                 } else {
                   setShowSuggestions(false);
-                  if (onToggleResults) onToggleResults(false);
+                  if (onSearchResult) onSearchResult(false, false);
                 }
               }}
               placeholder="Client complaints are increasing"

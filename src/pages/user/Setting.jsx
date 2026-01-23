@@ -88,7 +88,7 @@ const Setting = () => {
                   <input
                     readOnly
                     value={email}
-                    className="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm text-slate-500"
+                    className="w-full bg-slate-50 border dark:text-black border-slate-200 rounded-lg px-4 py-2.5 text-sm text-slate-500"
                   />
                   <div className="absolute flex items-center gap-1 text-xs font-medium text-green-600 right-3">
                     <CheckCircle2 className="w-4 h-4 " /> Verified
@@ -108,7 +108,7 @@ const Setting = () => {
                     type="text"
                     value={displayName}
                     onChange={(e) => setDisplayName(e.target.value)}
-                    className="w-full border border-slate-200 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+                    className="w-full border border-slate-200 rounded-lg dark:text-black px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
                   />
                   <Button className="px-4 text-white bg-blue-500 hover:bg-blue-700">
                     <CheckCircle2 className="w-4 h-4" />
