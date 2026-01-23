@@ -31,9 +31,17 @@ export const AuthProvider = ({ children }) => {
   /* ---------------------------------- */
   const signup = (email, password) => {
     setLoading(true);
-    return createUserWithEmailAndPassword(auth, email, password).finally(() =>
-      setLoading(false),
-    );
+    return createUserWithEmailAndPassword(auth, email, password)
+      .then(async (credential) => {
+        try {
+          const token = await credential.user.getIdToken();
+          console.log("[Auth] ID token (signup):", token);
+        } catch (err) {
+          console.warn("[Auth] Failed to retrieve ID token after signup", err);
+        }
+        return credential;
+      })
+      .finally(() => setLoading(false));
   };
 
   /* ---------------------------------- */
@@ -41,9 +49,17 @@ export const AuthProvider = ({ children }) => {
   /* ---------------------------------- */
   const login = (email, password) => {
     setLoading(true);
-    return signInWithEmailAndPassword(auth, email, password).finally(() =>
-      setLoading(false),
-    );
+    return signInWithEmailAndPassword(auth, email, password)
+      .then(async (credential) => {
+        try {
+          const token = await credential.user.getIdToken();
+          console.log("[Auth] ID token (login):", token);
+        } catch (err) {
+          console.warn("[Auth] Failed to retrieve ID token after login", err);
+        }
+        return credential;
+      })
+      .finally(() => setLoading(false));
   };
 
   /* ---------------------------------- */

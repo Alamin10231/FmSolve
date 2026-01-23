@@ -155,6 +155,21 @@ const attachAuthToken = (instance) => {
 attachAuthToken(userAxios);
 
 /* ---------------------------------- */
+/* Attach Lang for Public             */
+/* ---------------------------------- */
+publicAxios.interceptors.request.use(
+  (config) => {
+    const lang = (localStorage.getItem("app_lang") || "EN").toLowerCase();
+    config.params = {
+      ...(config.params || {}),
+      lang,
+    };
+    return config;
+  },
+  (error) => Promise.reject(error),
+);
+
+/* ---------------------------------- */
 /* Normalize Error                    */
 /* ---------------------------------- */
 const normalizeError = (error) => {
@@ -174,11 +189,7 @@ const normalizeError = (error) => {
 
   return Promise.reject({
     status,
-    message:
-      data?.message ||
-      data?.error ||
-      error?.message ||
-      "Request failed",
+    message: data?.message || data?.error || error?.message || "Request failed",
     data,
     raw: error,
   });
@@ -187,15 +198,9 @@ const normalizeError = (error) => {
 /* ---------------------------------- */
 /* Response Interceptors              */
 /* ---------------------------------- */
-publicAxios.interceptors.response.use(
-  (res) => res,
-  normalizeError,
-);
+publicAxios.interceptors.response.use((res) => res, normalizeError);
 
-userAxios.interceptors.response.use(
-  (res) => res,
-  normalizeError,
-);
+userAxios.interceptors.response.use((res) => res, normalizeError);
 
 /* ---------------------------------- */
 /* Default export (public)            */

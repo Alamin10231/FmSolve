@@ -1,11 +1,27 @@
 import React, { useState } from "react";
 import { X, ArrowLeft } from "lucide-react";
+import { useAdminFsidStats } from "@/features/admin/query";
+import { useSearchParams } from "react-router-dom";
 
 const statusColors = {
   "Level 01": "bg-blue-100 text-blue-700",
   "Level 02": "bg-orange-100 text-orange-700",
   "Level 03": "bg-emerald-100 text-emerald-700",
 };
+
+// Wrapper moved outside render to avoid component creation during render
+const Wrapper = ({ children, isModal }) =>
+  isModal ? (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 ">
+      <div className="bg-white dark:bg-gray-900 rounded-xl shadow-2xl w-full max-w-5xl max-h-[90vh] overflow-hidden flex flex-col border border-gray-200 dark:border-gray-800">
+        {children}
+      </div>
+    </div>
+  ) : (
+    <div className="max-w-6xl mx-auto overflow-hidden bg-white border border-gray-200 shadow-sm dark:bg-gray-900 rounded-xl dark:border-gray-800">
+      {children}
+    </div>
+  );
 
 const detailContent = {
   summary:
@@ -21,7 +37,7 @@ const detailContent = {
 const sampleRows = [
   {
     id: "12453",
-    problem: "Helpdesk overwhelmed with tickets",
+    problem: "Helpdesk overwhelmed with tickets buy alamin",
     status: "Level 02",
     date: "May 9, 2014",
     ...detailContent,
@@ -109,35 +125,57 @@ export const FsIdDetail = ({ onClose, user, isModal = true }) => {
   const [selectedRow, setSelectedRow] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
+  const [searchParams] = useSearchParams();
+
+  // Determine effective uid: prop -> query ?uid= -> prop id fallback
+  const effectiveUid = user?.uid || searchParams.get("uid") || user?.id;
+
+  // Fetch dataset via hook (enabled only when uid exists in hook implementation)
+  const { data: fsidStats } = useAdminFsidStats(effectiveUid);
+
+  // Normalize API items to table rows; fallback to sampleRows when empty
+  const normalizedRows = Array.isArray(fsidStats)
+    ? fsidStats.map((item) => {
+        const id = item?.fs_id ?? item?.id ?? "";
+        const problem = item?.question ?? "";
+        const s = item?.status || {};
+        const status = s?.level3
+          ? "Level 03"
+          : s?.level2
+            ? "Level 02"
+            : s?.level1
+              ? "Level 01"
+              : "Level 01";
+        const createdRaw = item?.created_at ?? item?.createdAt ?? "";
+        const date = createdRaw
+          ? new Date(createdRaw).toLocaleDateString(undefined, {
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+            })
+          : "";
+        return { id, problem, status, date, ...detailContent };
+      })
+    : [];
+
+  const rows = normalizedRows.length ? normalizedRows : sampleRows;
 
   // Pagination logic
-  const totalPages = Math.ceil(sampleRows.length / itemsPerPage);
+  const totalPages = Math.ceil(rows.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedRows = sampleRows.slice(startIndex, startIndex + itemsPerPage);
+  const paginatedRows = rows.slice(startIndex, startIndex + itemsPerPage);
 
   const handlePageChange = (page) => {
     if (page >= 1 && page <= totalPages) {
       setCurrentPage(page);
     }
   };
-
-  const Wrapper = ({ children }) =>
-    isModal ? (
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 ">
-        <div className="bg-white dark:bg-gray-900 rounded-xl shadow-2xl w-full max-w-5xl max-h-[90vh] overflow-hidden flex flex-col border border-gray-200 dark:border-gray-800">
-          {children}
-        </div>
-      </div>
-    ) : (
-      <div className="max-w-6xl mx-auto overflow-hidden bg-white border border-gray-200 shadow-sm dark:bg-gray-900 rounded-xl dark:border-gray-800">
-        {children}
-      </div>
-    );
+  // Wrapper declared above
 
   const closeAction = onClose || (() => {});
 
   return (
-    <Wrapper>
+    <Wrapper isModal={isModal}>
       {/* Header */}
       <div className="sticky top-0 z-10 flex items-center justify-between w-full px-5 py-4 bg-white border-b border-gray-200 dark:border-gray-800 dark:bg-gray-900">
         <div className="flex items-center gap-3 text-sm font-semibold text-gray-700 dark:text-gray-200">

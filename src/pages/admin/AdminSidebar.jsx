@@ -11,7 +11,7 @@ import dashboardIcon from "@/assets/icons/ic_round-dashboard.svg";
 import usersIcon from "@/assets/icons/gridicons_user-add.svg";
 import paymentIcon from "@/assets/icons/Vector (4).svg";
 import fmsolveIdIcon from "@/assets/icons/hugeicons_id.svg";
-import analyticsIcon from "@/assets/icons/tdesign_chart-analytics.svg";
+
 import securityIcon from "@/assets/icons/ic_baseline-security.svg";
 import profileIcon from "@/assets/icons/gridicons_user-add.svg";
 import themeIcon from "@/assets/icons/material-symbols-light_light-mode.svg";
@@ -23,6 +23,7 @@ const AdminSidebar = () => {
 
   const mainMenu = [
     { label: "Dashboard", icon: dashboardIcon, to: "/admin/dashboard" },
+    { label: "Analytics", icon: dashboardIcon, to: "/admin/analystics" },
     { label: "FM Solve ID", icon: fmsolveIdIcon, to: "/admin/usermanagment" },
     { label: "Payment M.", icon: paymentIcon, to: "/admin/payment" },
     { label: "User Management", icon: usersIcon, to: "/admin/fmsolveid" },
@@ -30,7 +31,6 @@ const AdminSidebar = () => {
 
   const secondaryMenu = [
     { label: "Profile", icon: profileIcon, to: "/admin/profile" },
-    { label: "Analytics", icon: analyticsIcon, to: "/admin/analystics" },
     { label: "Security", icon: securityIcon, to: "/admin/security" },
   ];
 
