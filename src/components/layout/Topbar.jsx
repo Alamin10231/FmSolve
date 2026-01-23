@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import manimg from "../../assets/images/image 18.png";
+// import whitelogo from "../../assets/images/whitelogo.png";
 import {
   MdDashboard,
   MdOutlineDarkMode,
@@ -11,7 +12,7 @@ import {
 import { FaChevronDown } from "react-icons/fa";
 
 import logo from "../../assets/logo.png";
-// import logo from "../../assets/images/FmSolve.png"
+import whitelogo from "../../assets/images/FmSolve.png";
 import { AuthContext } from "../../context/AuthProvider";
 import { Button } from "../ui/button";
 import { useTheme } from "@/context/ThemeContext";
@@ -48,8 +49,9 @@ const Topbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
-  const displayName = user?.displayName || user?.email || "User";
-  const initial = displayName.charAt(0).toUpperCase();
+  const displayName = (user?.displayName || user?.providerData?.[0]?.displayName || user?.email?.split("@")[0] || "User");
+const initial = displayName.charAt(0).toUpperCase();
+
 
   const handleLogout = async () => {
     try {
@@ -73,11 +75,23 @@ const Topbar = () => {
   };
 
   return (
-    <nav className="w-full bg-white dark:bg-[#0b0f1a] border-b border-gray-200 dark:border-gray-600 fixed top-0 z-50 transition-colors duration-300 ">
+    <nav className="w-full py-2 bg-white dark:bg-[#0b0f1a] border-b border-gray-200 dark:border-gray-600 fixed top-0 z-50 transition-colors duration-300 ">
       <div className="px-4 mx-auto max-w-7xl">
         <div className="flex items-center justify-between h-16 ">
           <Link to="/" className="flex items-center gap-2 ">
-            <img src={logo} alt="logo" className="h-10 bg-transparent " />
+            {theme === "light" ? (
+              <img
+                src={whitelogo}
+                alt="logo"
+                className="bg-transparent bg-blue-600 "
+              />
+            ) : (
+              <img
+                src={logo}
+                alt="logo"
+                className="bg-transparent bg-blue-600 "
+              />
+            )}
           </Link>
 
           <ul className="items-center hidden gap-6 text-gray-600 lg:flex dark:text-gray-300 text-md">
@@ -85,12 +99,11 @@ const Topbar = () => {
               <li key={menu.label} className="relative group">
                 <div className="flex items-center gap-1 cursor-pointer hover:text-blue-500 dark:hover:text-white">
                   <div className="flex items-center">
-                    {
-                      menu.label === "Ask Sam" ? (
-                        
-                        <img className="mr-2 w-9 h-9" src={manimg} alt="" />
-                      ):""
-                    }
+                    {menu.label === "Ask Sam" ? (
+                      <img className="mr-2 w-9 h-9" src={manimg} alt="" />
+                    ) : (
+                      ""
+                    )}
                   </div>
                   {menu.label}
                   <FaChevronDown size={12} />
@@ -339,8 +352,8 @@ const Topbar = () => {
                 </Link>
               ) : (
                 <div>
-                  <img src={user.photoURL} alt={user.displayName} />
-                  <span>{user.displayName}</span>
+                  <img src={user.photoURL} alt={displayName} />
+                  <span>{displayName}</span>
                   <select
                     className="w-full px-3 py-2 mt-2 text-sm bg-white border rounded dark:bg-[#11162a] dark:text-white"
                     onChange={(e) => {

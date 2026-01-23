@@ -3,7 +3,7 @@ export const ThemeContext = createContext();
 export const ThemeProvider = ({ children }) => {
   const [serviceIndex, setServiceIndex] = useState(0);
 
-  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
+  const [theme, setTheme] = useState(localStorage.getItem("theme") || "dark");
 
   useEffect(() => {
     const root = window.document.documentElement;

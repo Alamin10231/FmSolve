@@ -15,6 +15,14 @@ import ReportHistory from "../pages/user/ReportHistory";
 import ReportView from "../pages/user/ReportView";
 import { AdminLayout } from "../components/layout/AdminLayout";
 import { Analystics } from "../pages/admin/Analystics";
+import { Dashboard as AdminDashboard } from "@/pages/admin/Dashboard";
+import { Credits } from "@/pages/admin/Credits";
+import { PaymentM } from "@/pages/admin/PaymentM";
+import { FmSolveId } from "@/pages/admin/FmSolveId";
+import { FsIdDetailPage } from "@/pages/admin/FsIdDetailPage";
+import { Security } from "@/pages/admin/Security";
+import { Profile as AdminProfile } from "@/pages/admin/Profile";
+import { Notifications } from "@/pages/admin/Notifications";
 import { Survey } from "../pages/landing/Survey";
 import AllServicepage from "@/pages/AllServicepage";
 import MeetSam from "@/pages/MeetSam";
@@ -32,6 +40,8 @@ import AskSamAnswerDetail from "@/pages/pagecomponents/AskSam/AskSamAnswerDetail
 import AskSamFullAnswer from "@/pages/pagecomponents/AskSam/AskSamFullAnswer";
 import Profile from "@/pages/user/Profile";
 import Setting from "@/pages/user/Setting";
+import UserManagment from "@/pages/admin/UserManagment";
+
 // jimport StabilityReports from "@/pages/pagecomponents/AskSam/StabilityReports";
 
 export const Router = () => {
@@ -81,7 +91,13 @@ export const Router = () => {
         </Route>
 
         {/* now it's useradmin layout */}
-        <Route element={<UserLayout />}>
+        <Route element={<UserLayout />}
+        // element={
+        //   <PrivateRoute>
+        //     <UserLayout />
+        //   </PrivateRoute>
+        // }
+        >
           <Route path="/dashboard" element={<Dashboard />}></Route>
           <Route path="/profile" element={<Profile />}></Route>
           <Route path="/diagnostic" element={<Diagnostic />}></Route>
@@ -95,10 +111,27 @@ export const Router = () => {
           <Route path="/reports" element={<ReportHistory />}></Route>
         </Route>
 
-        {/* its for admin */}
+        {/* admin routes under AdminLayout (no role guard) */}
         <Route element={<AdminLayout />}>
-          <Route path="/admin/dashboard" element={<Dashboard />}></Route>
+          <Route path="/admin/dashboard" element={<AdminDashboard />}></Route>
+          <Route path="/admin/profile" element={<AdminProfile />}></Route>
+          <Route
+            path="/admin/notifications"
+            element={<Notifications />}
+          ></Route>
           <Route path="/admin/analystics" element={<Analystics />}></Route>
+          <Route
+            path="/admin/usermanagment"
+            element={<UserManagment />}
+          ></Route>
+          <Route path="/admin/credits" element={<Credits />}></Route>
+          <Route path="/admin/fmsolveid" element={<FmSolveId />}></Route>
+          <Route
+            path="/admin/fmsolveid/:id"
+            element={<FsIdDetailPage />}
+          ></Route>
+          <Route path="/admin/payment" element={<PaymentM />}></Route>
+          <Route path="/admin/security" element={<Security />}></Route>
         </Route>
       </Routes>
     </BrowserRouter>

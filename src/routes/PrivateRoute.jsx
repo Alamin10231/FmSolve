@@ -1,18 +1,16 @@
-import React from 'react'
-import { AuthContext } from '../context/AuthProvider';
-import { useContext } from 'react';
-import { useNavigate } from 'react-router';
+import React, { useContext } from "react";
+import { AuthContext } from "../context/AuthProvider";
+import { Navigate, useLocation } from "react-router-dom";
 
 export const PrivateRoute = ({ children }) => {
-const navigate = useNavigate();
-    const {user, loading} = useContext(AuthContext);
-   if(loading){
-    return <div>Loading...</div>;
-   }
-   if(user){
+    const { user, loading } = useContext(AuthContext);
+    const location = useLocation();
+
+    if (loading) return null; // Global loader handles auth init
+
+    if (!user) {
+        return <Navigate to="/login" replace state={{ from: location }} />;
+    }
+
     return children;
-   }
-   if(!user){
-    return navigate('/login');
-   }
-}
+};

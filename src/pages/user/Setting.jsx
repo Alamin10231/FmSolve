@@ -66,10 +66,10 @@ const Setting = () => {
                 <p className="mb-3 text-xs text-slate-500">
                   Upload a photo to personalize your account
                 </p>
-                <div className="flex items-center gap-4" type="file">
-                  <label className="flex items-center gap-2 px-3 py-1.5 border border-gray-300 rounded-md cursor-pointer bg-white text-sm hover:bg-gray-50 transition-colors">
+                <div className="flex items-center gap-4 " type="file">
+                  <label className="flex items-center gap-2 px-3 py-1.5 border border-gray-300 rounded-md cursor-pointer dark:bg-black text-sm hover:bg-gray-50 transition-colors">
                     <Camera size={16} />
-                    <span>Change Photo</span>
+                    <span className="text-black dark:text-white">Change Photo</span>
                     <input type="file" className="hidden" />
                   </label>
                   <span className="text-[10px] text-slate-400 uppercase">
@@ -88,7 +88,7 @@ const Setting = () => {
                   <input
                     readOnly
                     value={email}
-                    className="w-full bg-slate-50 border dark:text-black border-slate-200 rounded-lg px-4 py-2.5 text-sm text-slate-500"
+                    className="w-full dark:bg-black dark:text-white bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm text-slate-500"
                   />
                   <div className="absolute flex items-center gap-1 text-xs font-medium text-green-600 right-3">
                     <CheckCircle2 className="w-4 h-4 " /> Verified
@@ -100,15 +100,15 @@ const Setting = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-1.5">
+                <label className="block text-sm font-medium mb-1.5 ">
                   Display Name
                 </label>
-                <div className="flex gap-2">
+                <div className="flex gap-2 ">
                   <input
                     type="text"
                     value={displayName}
                     onChange={(e) => setDisplayName(e.target.value)}
-                    className="w-full border border-slate-200 rounded-lg dark:text-black px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+                    className="w-full dark:bg-black dark:text-white  border border-slate-200 rounded-lg px-4 py-2.5 text-sm  focus:ring-2 focus:ring-blue-500 outline-none"
                   />
                   <Button className="px-4 text-white bg-blue-500 hover:bg-blue-700">
                     <CheckCircle2 className="w-4 h-4" />

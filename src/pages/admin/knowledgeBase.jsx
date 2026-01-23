@@ -1,7 +1,5 @@
-import React from 'react'
+import React from "react";
 
-export const knowledgeBase = () => {
-  return (
-    <div>knowledgeBase</div>
-  )
-}
+export const KnowledgeBase = () => {
+  return <div>Knowledge Base</div>;
+};
