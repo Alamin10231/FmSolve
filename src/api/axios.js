@@ -102,7 +102,8 @@ export const baseUrl =
 /* ---------------------------------- */
 const baseConfig = {
   baseURL: baseUrl,
-  timeout: 30000,
+  timeout: 90000,
+  withCredentials: true,
   headers: {
     Accept: "application/json",
     "Content-Type": "application/json",
@@ -134,6 +135,7 @@ const getFirebaseToken = async () => {
 const attachAuthToken = (instance) => {
   instance.interceptors.request.use(
     async (config) => {
+      config.headers = config.headers || {};
       const token = await getFirebaseToken();
       const lang = (localStorage.getItem("app_lang") || "EN").toLowerCase();
 

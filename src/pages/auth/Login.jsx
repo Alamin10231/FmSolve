@@ -9,7 +9,7 @@ const Login = () => {
   // const navigate = useNavigate();
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
-  const { login } = useContext(AuthContext);
+  const { login, googleLogin } = useContext(AuthContext);
 
   const navigate = useNavigate();
 
@@ -17,15 +17,38 @@ const Login = () => {
     e.preventDefault();
     login(email, password)
       .then(() => {
-        navigate("/");
-      })
+        const pendingFsid = sessionStorage.getItem("pending_fsid");
+        const urlParams = new URLSearchParams(window.location.search);
+        const fsid = urlParams.get("fsid") || pendingFsid;
 
+        if (fsid) {
+          navigate(`/ask-sam/answer/full?fsid=${encodeURIComponent(fsid)}`);
+        } else {
+          navigate("/");
+        }
+      })
       .catch((error) => {
         console.log(error.message);
         alert(error.message);
-        navigate("/login");
       });
-    // navigate("/")
+  };
+  const handleGoogle = () => {
+    googleLogin()
+      .then(() => {
+        const pendingFsid = sessionStorage.getItem("pending_fsid");
+        const urlParams = new URLSearchParams(window.location.search);
+        const fsid = urlParams.get("fsid") || pendingFsid;
+
+        if (fsid) {
+          navigate(`/ask-sam/answer/full?fsid=${encodeURIComponent(fsid)}`);
+        } else {
+          navigate("/");
+        }
+      })
+      .catch((error) => {
+        console.log(error.message);
+        alert(error.message);
+      });
   };
   return (
     <>
@@ -96,6 +119,24 @@ const Login = () => {
                 Login
               </Button>
             </form>
+
+            {/* Divider */}
+            <div className="flex items-center gap-4 my-6">
+              <div className="h-px flex-1 bg-white/20" />
+              <span className="text-white/70">or</span>
+              <div className="h-px flex-1 bg-white/20" />
+            </div>
+
+            {/* Google Login */}
+            <Button
+              type="button"
+              onClick={handleGoogle}
+              className="w-full py-3 text-base font-medium bg-white text-black rounded-xl hover:opacity-90 flex items-center justify-center gap-2"
+              variant="outline"
+            >
+              <span>Continue with Google</span>
+              <span style={{ fontWeight: 700 }}>G</span>
+            </Button>
 
             {/* Register */}
             <Link to="/register">

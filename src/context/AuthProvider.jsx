@@ -1,9 +1,12 @@
+/* eslint-disable react-refresh/only-export-components */
 import React, { createContext, useEffect, useState } from "react";
 import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup,
   signOut,
 } from "firebase/auth";
 import { auth } from "@/firebase/firebase.config";
@@ -63,6 +66,25 @@ export const AuthProvider = ({ children }) => {
   };
 
   /* ---------------------------------- */
+  /* Google Login                       */
+  /* ---------------------------------- */
+  const googleLogin = () => {
+    setLoading(true);
+    const provider = new GoogleAuthProvider();
+    return signInWithPopup(auth, provider)
+      .then(async (credential) => {
+        try {
+          const token = await credential.user.getIdToken();
+          console.log("[Auth] ID token (google):", token);
+        } catch (err) {
+          console.warn("[Auth] Failed to retrieve ID token after google login", err);
+        }
+        return credential;
+      })
+      .finally(() => setLoading(false));
+  };
+
+  /* ---------------------------------- */
   /* Logout                             */
   /* ---------------------------------- */
   const logout = () => {
@@ -86,6 +108,7 @@ export const AuthProvider = ({ children }) => {
     loading,
     signup,
     login,
+    googleLogin,
     logout,
     forgetPassword,
   };

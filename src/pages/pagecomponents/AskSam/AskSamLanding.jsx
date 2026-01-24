@@ -3,13 +3,16 @@ import bgVideo from "/firevideo.mp4";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search, Sparkles } from "lucide-react";
-// Results are rendered by parent via onSearchResult(showResults, hasMatch)
+import { requestAskPrelogin } from "@/services/asksam.service";
+// Results are rendered by parent via onAnswerReceived(data)
 
-const AskSamLanding = ({ onSearchResult }) => {
+const AskSamLanding = ({ onSearchResult, onAnswerReceived }) => {
   const [query, setQuery] = useState("");
   const [showVideo, setShowVideo] = useState(true);
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const videoRef = useRef(null);
 
   const fakeQuestions = [
@@ -35,23 +38,35 @@ const AskSamLanding = ({ onSearchResult }) => {
     return () => clearTimeout(timer);
   }, []);
 
-  const handleAsk = (e) => {
+  const handleAsk = async (e) => {
     e.preventDefault();
     const trimmed = query.trim().toLowerCase();
     if (!trimmed) return;
-
-    const matched = fakeQuestions.filter((q) =>
-      q.toLowerCase().includes(trimmed),
-    );
-    const has = trimmed && matched.length > 0;
-    // When submitting, show the results area; parent decides what to render
-    onSearchResult && onSearchResult(true, has);
-    // If we have matches, keep suggestions visible; otherwise clear them
-    if (has) {
-      setSuggestions(matched.slice(0, 6));
-      setShowSuggestions(true);
-    } else {
-      setShowSuggestions(false);
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await requestAskPrelogin({ question: query });
+      const payload = {
+        fsid: res?.temp_fsid ?? res?.fsid ?? res?.id,
+        question: res?.question ?? query,
+        quickAnswer: res?.quick_answer ?? res?.answer ?? "",
+        title: res?.title,
+        tags: res?.tags ?? [],
+        breadcrumbs: res?.breadcrumbs ?? [],
+      };
+      if (onAnswerReceived) onAnswerReceived(payload);
+    } catch (err) {
+      const status = err?.response?.status;
+      const msg =
+        err?.response?.data?.message ||
+        err?.response?.data?.detail ||
+        err?.message ||
+        "Request failed. Please try again.";
+      console.error("Ask Sam request failed", { status, data: err?.response?.data, err });
+      setError(status ? `${status}: ${msg}` : msg);
+      if (onSearchResult) onSearchResult(true, false);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -161,6 +176,7 @@ const AskSamLanding = ({ onSearchResult }) => {
 
           <Button
             type="submit"
+            disabled={loading}
             className="
               px-6 py-6 h-[52px]
               text-white bg-orange-600 hover:bg-orange-700
@@ -168,9 +184,15 @@ const AskSamLanding = ({ onSearchResult }) => {
             "
           >
             <Sparkles className="w-5 h-5" />
-            Ask Sam
+            {loading ? "Generating..." : "Ask Sam"}
           </Button>
         </form>
+
+        {error && (
+          <p className="mt-3 text-sm text-red-600 dark:text-red-400">
+            {error}
+          </p>
+        )}
 
         {/* Trust Signals */}
         <div

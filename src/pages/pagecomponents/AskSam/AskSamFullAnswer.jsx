@@ -1,5 +1,6 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
+import { fetchFullAnswerAuthed } from "@/services/asksam.service";
 
 const Chip = ({ children }) => (
   <span className="text-[11px] px-2 py-1 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
@@ -19,6 +20,63 @@ const Section = ({ title, children }) => (
 );
 
 const AskSamFullAnswer = () => {
+  const [searchParams] = useSearchParams();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [answerData, setAnswerData] = useState(null);
+
+  useEffect(() => {
+    const fsid = searchParams.get("fsid") || sessionStorage.getItem("pending_fsid");
+    const question = searchParams.get("question");
+
+    setLoading(true);
+    setError(null);
+
+    fetchFullAnswerAuthed(fsid, question)
+      .then((data) => {
+        setAnswerData(data);
+        sessionStorage.removeItem("pending_fsid");
+      })
+      .catch((err) => {
+        console.error("Failed to fetch full answer", err);
+        const msg = err?.data?.error || err?.message || "Failed to load answer";
+        setError(msg);
+      })
+      .finally(() => setLoading(false));
+  }, [searchParams]);
+
+  if (loading) {
+    return (
+      <div className="px-4 py-8 sm:py-12">
+        <div className="max-w-4xl mx-auto text-center">
+          <p className="text-slate-600 dark:text-slate-300">Loading full answer...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="px-4 py-8 sm:py-12">
+        <div className="max-w-4xl mx-auto text-center">
+          <p className="text-red-600 dark:text-red-400">{error}</p>
+          <Link to="/ask-sam" className="text-sm text-blue-600 hover:underline mt-4 inline-block">
+            ← Back to Ask Sam
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  const tags = answerData?.["level 1"]?.tags || [];
+  const question = answerData?.["level 1"]?.question || answerData?.question || "Your Question";
+  const shortAnswer = answerData?.["level 1"]?.shortAnswer || "";
+  const valueToFM = answerData?.["level 1"]?.valueToFM || "";
+  const whenToUse = answerData?.["level 1"]?.whenToUse || "";
+  const detailedAnswer = answerData?.["level 1"]?.detailedAnswer || "";
+  const relatedQuestions = answerData?.["level 1"]?.relatedQuestions || [];
+  const permanentFsId = answerData?.fs_id;
+
   return (
     <div className="px-4 py-8 sm:py-12">
       <div className="mx-auto max-w-4xl font-DmSans">
@@ -33,59 +91,66 @@ const AskSamFullAnswer = () => {
         </div>
 
         {/* Breadcrumb chips */}
-        <div className="flex flex-wrap gap-2 mb-3">
-          <Chip>Data & Tech</Chip>
-          <Chip>Performance</Chip>
-          <Chip>Operational</Chip>
-        </div>
+        {tags.length > 0 && (
+          <div className="flex flex-wrap gap-2 mb-3">
+            {tags.map((tag, idx) => (
+              <Chip key={idx}>{tag}</Chip>
+            ))}
+          </div>
+        )}
 
         {/* Title */}
         <h1 className="text-xl sm:text-2xl md:text-3xl font-bold leading-snug text-slate-900 dark:text-white">
-          Full Answer: Handling unclear or nonsense maintenance requests or
-          search terms in CAFM/helpdesk systems
+          {question}
         </h1>
 
-        <Section title="Executive Summary">
-          Treat unclear or nonsense inputs as a data quality and search design
-          problem. Standardise request forms, add minimal validation, and triage
-          unclear inputs before work is raised. Train teams to use consistent FM
-          terminology and continuously improve keywords, categories, and prompts
-          based on failed searches and repeated issues.
-        </Section>
+        {shortAnswer && (
+          <Section title="Quick Answer">
+            {shortAnswer}
+          </Section>
+        )}
 
-        <Section title="Key Actions">
-          <ul className="list-disc pl-5 space-y-2">
-            <li>
-              Clarify intent: Is it reactive, compliance, soft/hard FM, or
-              commercial?
-            </li>
-            <li>
-              Use guided request forms with examples and required fields to
-              reduce ambiguity.
-            </li>
-            <li>
-              Validate inputs lightly (e.g., block random strings, require
-              asset/location where relevant).
-            </li>
-            <li>
-              Introduce a quick operator triage/check-back loop before approving
-              unclear requests.
-            </li>
-            <li>
-              Maintain a living FM taxonomy and search synonyms in your CAFM.
-            </li>
-            <li>
-              Log failed searches to improve prompts, keywords, and training.
-            </li>
-          </ul>
-        </Section>
+        {valueToFM && (
+          <Section title="Value to FM">
+            {valueToFM}
+          </Section>
+        )}
 
-        <Section title="Why It Matters">
-          Precise language cuts rework, improves compliance evidence, and speeds
-          up problem resolution. Organisations that standardise terminology and
-          structure see faster answers, fewer handoffs, and better reporting
-          quality.
-        </Section>
+        {whenToUse && (
+          <Section title="When to Use">
+            {whenToUse}
+          </Section>
+        )}
+
+        {detailedAnswer && (
+          <Section title="Detailed Answer">
+            <div className="whitespace-pre-line">{detailedAnswer}</div>
+          </Section>
+        )}
+
+        {relatedQuestions.length > 0 && (
+          <div className="mt-5">
+            <h2 className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3">
+              Related Questions
+            </h2>
+            <div className="space-y-2">
+              {relatedQuestions.map((q, idx) => (
+                <div
+                  key={idx}
+                  className="p-3 text-sm bg-white dark:bg-[#0d1b2a] border border-slate-200 dark:border-gray-700 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-900/40 transition"
+                >
+                  {q}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {permanentFsId && (
+          <div className="mt-4 text-xs text-slate-500 dark:text-slate-400">
+            Answer ID: {permanentFsId}
+          </div>
+        )}
 
         <div className="mt-6 p-4 border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/40 rounded-xl flex items-center gap-3">
           <img src="/favicon.ico" alt="Sam" className="w-5 h-5 rounded-full" />

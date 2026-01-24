@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import registerImage from "../../assets/images/register.svg";
 import logo from "../../assets/logo.png";
 import { useNavigate } from "react-router-dom";
-import { useContext } from "react";
 import { AuthContext } from "../../context/AuthProvider";
 import { Button } from "@/components/ui/button";
 
@@ -11,7 +10,7 @@ import { Button } from "@/components/ui/button";
 
 export const Register = () => {
   const navigate = useNavigate();
-  const { signup } = useContext(AuthContext); // 🔹 get signup from context
+  const { signup, googleLogin } = useContext(AuthContext); // 🔹 get signup & google from context
 
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -40,6 +39,15 @@ export const Register = () => {
 
       alert(error.message);
     });
+  };
+  const handleGoogle = () => {
+    // Google sign-in also creates account if not present
+    googleLogin()
+      .then(() => navigate("/"))
+      .catch((error) => {
+        console.log(error.message);
+        alert(error.message);
+      });
   };
   
 
@@ -143,6 +151,24 @@ export const Register = () => {
               {loading ? "Registering..." : "Register"}
             </Button>
           </form>
+
+          {/* Divider */}
+          <div className="flex items-center gap-4 my-6">
+            <div className="h-px flex-1 bg-white/20" />
+            <span className="text-white/70">or</span>
+            <div className="h-px flex-1 bg-white/20" />
+          </div>
+
+          {/* Google Register/Login */}
+          <Button
+            type="button"
+            onClick={handleGoogle}
+            className="w-full py-3 text-base font-medium bg-white text-black rounded-xl hover:opacity-90 flex items-center justify-center gap-2"
+            variant="outline"
+          >
+            <span>Continue with Google</span>
+            <span style={{ fontWeight: 700 }}>G</span>
+          </Button>
 
           {/* Login */}
           <p className="pt-6 text-base text-center text-white/70">
