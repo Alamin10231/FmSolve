@@ -1,6 +1,7 @@
-import React, { useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { AuthContext } from "@/context/AuthProvider";
+import { requestAskPrelogin } from "@/services/asksam.service";
 
 const Chip = ({ children }) => (
   <span className="text-[11px] px-2 py-1 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
@@ -11,23 +12,74 @@ const Chip = ({ children }) => (
 const AskSamAnswerDetail = ({ answerData }) => {
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
+  const [searchParams] = useSearchParams();
 
-  if (!answerData) {
-    return null;
+  // State for API data if routed
+  const [apiData, setApiData] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  let fsid, question, quick_answer, tags, breadcrumbs;
+  if (answerData) {
+    ({
+      fsid,
+      question,
+      quick_answer,
+      tags = [],
+      breadcrumbs = [],
+    } = answerData);
+  } else {
+    question = searchParams.get("question") || "";
+    fsid = apiData?.temp_fsid;
+    quick_answer = apiData?.quick_answer;
+    tags = [];
+    breadcrumbs = [];
   }
 
-  const { fsid, question, quickAnswer, tags = [], breadcrumbs = [] } =
-    answerData;
+  useEffect(() => {
+    if (!answerData && question) {
+      setLoading(true);
+      setError(null);
+      requestAskPrelogin({ question })
+        .then((res) => {
+          setApiData(res);
+        })
+        .catch((err) => {
+          setError("Failed to load answer.", err);
+        })
+        .finally(() => setLoading(false));
+    }
+    
+  }, [answerData, question]);
 
   const handleGenerateFullAnswer = () => {
     if (!fsid) return;
     sessionStorage.setItem("pending_fsid", fsid);
     if (!user) {
-      navigate(`/login?fsid=${encodeURIComponent(fsid)}&question=${encodeURIComponent(question || "")}`);
+      navigate(
+        `/login?fsid=${encodeURIComponent(fsid)}&question=${encodeURIComponent(question || "")}`,
+      );
       return;
     }
-    navigate(`/ask-sam/answer/full?fsid=${encodeURIComponent(fsid)}&question=${encodeURIComponent(question || "")}`);
+    navigate(
+      `/ask-sam/answer/full?fsid=${encodeURIComponent(fsid)}&question=${encodeURIComponent(question || "")}`,
+    );
   };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[200px] text-slate-500 dark:text-slate-300">
+        Loading...
+      </div>
+    );
+  }
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-[200px] text-red-500">
+        {error}
+      </div>
+    );
+  }
 
   return (
     <div className="px-4 py-8 sm:py-12">
@@ -63,7 +115,7 @@ const AskSamAnswerDetail = ({ answerData }) => {
             <span className="font-mono">{fsid || "(not returned)"}</span>
           </div>
           <p className="text-[13px] sm:text-sm leading-relaxed text-slate-700 dark:text-slate-300">
-            {quickAnswer || "We generated a quick answer for you."}
+            {quick_answer || "We generated a quick answer for you."}
           </p>
 
           {/* Generate Full Answer box */}

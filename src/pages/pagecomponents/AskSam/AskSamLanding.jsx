@@ -3,10 +3,14 @@ import bgVideo from "/firevideo.mp4";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search, Sparkles } from "lucide-react";
-import { requestAskPrelogin } from "@/services/asksam.service";
+import { requestAskPrelogin, searchAskSam } from "@/services/asksam.service";
 // Results are rendered by parent via onAnswerReceived(data)
 
-const AskSamLanding = ({ onSearchResult, onAnswerReceived }) => {
+const AskSamLanding = ({
+  onSearchResult,
+  onAnswerReceived,
+  onSuggestionsUpdate,
+}) => {
   const [query, setQuery] = useState("");
   const [showVideo, setShowVideo] = useState(true);
   const [suggestions, setSuggestions] = useState([]);
@@ -15,14 +19,31 @@ const AskSamLanding = ({ onSearchResult, onAnswerReceived }) => {
   const [error, setError] = useState(null);
   const videoRef = useRef(null);
 
-  const fakeQuestions = [
-    "Client complaints are increasing",
-    "HVAC energy usage too high",
-    "Helpdesk calls not categorised correctly",
-    "PPM completion rates are too low",
-    "Vendors missing SLAs frequently",
-    "Cleaning quality inconsistent across floors",
-  ];
+  // Fetch suggestions from API
+  const fetchSuggestions = async (val) => {
+    try {
+      const res = await searchAskSam(val);
+      // Only show the 'question' field from each result
+      let list = [];
+      if (Array.isArray(res)) {
+        list = res
+          .map((item) => item.question)
+          .filter(Boolean)
+          .slice(0, 6);
+        setSuggestions(list);
+        setShowSuggestions(res.length > 0);
+      } else {
+        setSuggestions([]);
+        setShowSuggestions(false);
+      }
+      if (onSuggestionsUpdate) onSuggestionsUpdate(list);
+    } catch (e) {
+      setSuggestions([]);
+      setShowSuggestions(false);
+      if (onSuggestionsUpdate) onSuggestionsUpdate([]);
+      console.log(e);
+    }
+  };
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -62,7 +83,11 @@ const AskSamLanding = ({ onSearchResult, onAnswerReceived }) => {
         err?.response?.data?.detail ||
         err?.message ||
         "Request failed. Please try again.";
-      console.error("Ask Sam request failed", { status, data: err?.response?.data, err });
+      console.error("Ask Sam request failed", {
+        status,
+        data: err?.response?.data,
+        err,
+      });
       setError(status ? `${status}: ${msg}` : msg);
       if (onSearchResult) onSearchResult(true, false);
     } finally {
@@ -79,7 +104,6 @@ const AskSamLanding = ({ onSearchResult, onAnswerReceived }) => {
           : `bg-white text-gray-900 dark:bg-[#0b0f1a] dark:text-white`)
       }
     >
-      {/* Background Video (only for landing section) */}
       {showVideo && (
         <video
           ref={videoRef}
@@ -141,15 +165,11 @@ const AskSamLanding = ({ onSearchResult, onAnswerReceived }) => {
                 const val = e.target.value;
                 setQuery(val);
                 if (val.trim().length > 0) {
-                  const matched = fakeQuestions.filter((q) =>
-                    q.toLowerCase().includes(val.trim().toLowerCase()),
-                  );
-                  setSuggestions(matched.slice(0, 6));
-                  const has = matched.length > 0;
-                  setShowSuggestions(has);
+                  fetchSuggestions(val.trim());
                   if (onSearchResult) onSearchResult(false, false);
                 } else {
                   setShowSuggestions(false);
+                  setSuggestions([]);
                   if (onSearchResult) onSearchResult(false, false);
                 }
               }}
@@ -164,6 +184,7 @@ const AskSamLanding = ({ onSearchResult, onAnswerReceived }) => {
                     onMouseDown={() => {
                       setQuery(s);
                       setShowSuggestions(false);
+                      // Do NOT trigger onSuggestionClick here, just fill input
                     }}
                     className="px-3 py-2 text-sm cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800"
                   >
@@ -189,9 +210,7 @@ const AskSamLanding = ({ onSearchResult, onAnswerReceived }) => {
         </form>
 
         {error && (
-          <p className="mt-3 text-sm text-red-600 dark:text-red-400">
-            {error}
-          </p>
+          <p className="mt-3 text-sm text-red-600 dark:text-red-400">{error}</p>
         )}
 
         {/* Trust Signals */}

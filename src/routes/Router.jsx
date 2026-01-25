@@ -75,6 +75,10 @@ export const Router = () => {
           <Route path="/ask-sam/fm-answers" element={<FMAnswer />} />
           <Route path="/ask-sam/results" element={<AskSamStaticResults />} />
           <Route path="/ask-sam/answer" element={<AskSamAnswerDetail />} />
+          <Route
+            path="/ask-sam/answer-detail"
+            element={<AskSamAnswerDetail />}
+          />
           <Route path="/ask-sam/answer/full" element={<AskSamFullAnswer />} />
           <Route
             path="/ask-sam/stability-reports"
@@ -91,12 +95,13 @@ export const Router = () => {
         </Route>
 
         {/* now it's useradmin layout */}
-        <Route element={<UserLayout />}
-        // element={
-        //   <PrivateRoute>
-        //     <UserLayout />
-        //   </PrivateRoute>
-        // }
+        <Route
+          element={<UserLayout />}
+          // element={
+          //   <PrivateRoute>
+          //     <UserLayout />
+          //   </PrivateRoute>
+          // }
         >
           <Route path="/dashboard" element={<Dashboard />}></Route>
           <Route path="/profile" element={<Profile />}></Route>

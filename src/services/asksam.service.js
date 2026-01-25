@@ -7,9 +7,19 @@ import { publicAxios, userAxios } from "@/api/axios";
  */
 
 // Pre-login ask endpoint (returns quick answer + fsid, status: ok, type: prelogin)
+
 export const requestAskPrelogin = async (payload = {}) => {
   // Backend expects POST at /asksam/ask/
   const { data } = await publicAxios.post("/asksam/ask/", payload);
+  return data;
+};
+
+// GET /asksam/search/?q=... (search for questions)
+export const searchAskSam = async (query) => {
+  // Backend expects GET at /asksam/search/?q=...
+  const { data } = await publicAxios.get("/asksam/search/", {
+    params: { q: query },
+  });
   return data;
 };
 
@@ -36,7 +46,16 @@ export const fetchFullAnswerAuthed = async (fsid = null, question = null) => {
   return data;
 };
 
+// Updated to accept the fs_id as an argument
+export const fetchAnswerByFsId = async () => {
+  // Use a template literal to append the ID to the URL path
+  const { data } = await publicAxios.get(`/superadmin/fsids/`);
+  return data;
+};
+
 export default {
   requestAskPrelogin,
   fetchFullAnswerAuthed,
+  searchAskSam,
+  fetchAnswerByFsId,
 };

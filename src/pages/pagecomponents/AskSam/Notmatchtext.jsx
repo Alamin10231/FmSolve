@@ -1,6 +1,6 @@
 // import { Link } from 'lucide-react';
 import React from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router-dom";
 // Note: You can replace these with Lucide-React or Heroicons
 const SparkleIcon = () => (
   <svg
@@ -34,8 +34,14 @@ const TargetIcon = () => (
   </svg>
 );
 
-const Notmatchtext = () => {
-  // const [answerData, setAnswerData] = useState(null);
+const Notmatchtext = ({ query }) => {
+  const navigate = useNavigate();
+  const handleSynthesiseClick = () => {
+    // Navigate to a dedicated answer detail page with the question as a query param
+    navigate(
+      `/ask-sam/answer-detail?question=${encodeURIComponent(query || "")}`,
+    );
+  };
   return (
     <div className="flex items-center justify-center p-6 transition-colors duration-300 bg-white font-DmSans dark:bg-slate-900">
       <div className="w-full max-w-2xl space-y-8 text-center">
@@ -63,21 +69,22 @@ const Notmatchtext = () => {
         {/* Action Buttons */}
         <div className="grid w-full max-w-lg gap-4 mx-auto">
           {/* Option 1: Synthesise */}
-          <Link to="/ask-sam/answer">
-            <button className="flex items-center w-full p-5 text-left transition-all border-2 border-blue-100 rounded-2xl dark:border-blue-900/30 bg-blue-50/50 dark:bg-blue-900/10 hover:bg-blue-50 dark:hover:bg-blue-900/20 group">
-              <div className="p-3 mr-4 transition-transform bg-blue-100 rounded-xl dark:bg-blue-900/40 group-hover:scale-110">
-                <SparkleIcon />
-              </div>
-              <div>
-                <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">
-                  Synthesise Expert Answer
-                </h3>
-                <p className="text-sm text-slate-500 dark:text-slate-400">
-                  Quick guidance for your specific question
-                </p>
-              </div>
-            </button>
-          </Link>
+          <button
+            className="flex items-center w-full p-5 text-left transition-all border-2 border-blue-100 rounded-2xl dark:border-blue-900/30 bg-blue-50/50 dark:bg-blue-900/10 hover:bg-blue-50 dark:hover:bg-blue-900/20 group"
+            onClick={handleSynthesiseClick}
+          >
+            <div className="p-3 mr-4 transition-transform bg-blue-100 rounded-xl dark:bg-blue-900/40 group-hover:scale-110">
+              <SparkleIcon />
+            </div>
+            <div>
+              <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">
+                Synthesise Expert Answer
+              </h3>
+              <p className="text-sm text-slate-500 dark:text-slate-400">
+                Quick guidance for your specific question
+              </p>
+            </div>
+          </button>
 
           {/* Option 2: Stability Report */}
           <Link to="/ask-sam/stability-reports">
