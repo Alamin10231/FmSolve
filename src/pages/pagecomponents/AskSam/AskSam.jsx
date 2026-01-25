@@ -29,6 +29,9 @@ const AskSam = () => {
   const handleAnswerReceived = (payload) => {
     setShowResults(true);
     setLastQuery(payload?.question || "");
+
+    console.log("PAYLOAD", payload);
+
     // Check if the submitted query matches any suggestion (case-insensitive)
     const match = suggestions.some(
       (s) =>

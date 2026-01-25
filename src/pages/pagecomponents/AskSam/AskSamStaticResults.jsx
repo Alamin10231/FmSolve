@@ -1,8 +1,6 @@
 import { fetchAnswerByFsId } from "@/services/asksam.service";
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-// Assuming you exported this from your api file
-// import { fetchAnswerByFsId } from "../api/yourApiFile";
+import { useNavigate } from "react-router-dom";
 
 const Card = ({ children }) => (
   <div className="bg-white dark:bg-[#0d1b2a] border border-slate-200 dark:border-gray-700 rounded-2xl p-4 sm:p-6 shadow-sm">
@@ -13,12 +11,12 @@ const Card = ({ children }) => (
 const AskSamResults = () => {
   const [answers, setAnswers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getResults = async () => {
       try {
         const data = await fetchAnswerByFsId();
-        // The API returns an array of objects
         setAnswers(data);
       } catch (error) {
         console.error("Error fetching answers:", error);
@@ -28,6 +26,19 @@ const AskSamResults = () => {
     };
     getResults();
   }, []);
+
+  // Helper function to handle navigation with state
+  const handleViewDetail = (item) => {
+    navigate("/ask-sam/answer-detail", {
+      state: {
+        fsid: item.fs_id,
+        question: item.question,
+        quick_answer:
+          item.levels?.[0]?.level1?.shortAnswer || "No short answer available.",
+        tags: item.levels?.[0]?.level1?.tags || [],
+      },
+    });
+  };
 
   return (
     <div className="px-4 py-10 sm:py-14">
@@ -42,7 +53,7 @@ const AskSamResults = () => {
         </div>
 
         <div className="grid gap-6 mt-8 md:grid-cols-2">
-          {/* API Driven FM Answers */}
+          {/* FM Answers Section */}
           <Card>
             <div className="flex items-center justify-between mb-3">
               <div>
@@ -64,36 +75,31 @@ const AskSamResults = () => {
                   Loading insights...
                 </div>
               ) : (
-                answers.slice(0, 4).map((item) => {
-                  // Extracting data from your specific JSON structure
-                  const level1Data = item.levels[0]?.level1;
-
-                  return (
-                    <div
-                      key={item.id}
-                      className="p-3 border bg-slate-50 dark:bg-slate-900/40 rounded-xl border-slate-200 dark:border-slate-800"
+                answers.slice(0, 4).map((item) => (
+                  <div
+                    key={item.id}
+                    className="p-3 border bg-slate-50 dark:bg-slate-900/40 rounded-xl border-slate-200 dark:border-slate-800"
+                  >
+                    <h3 className="text-[13px] font-semibold text-slate-900 dark:text-white line-clamp-2">
+                      {item.question}
+                    </h3>
+                    <p className="mt-1 text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
+                      {item.levels?.[0]?.level1?.shortAnswer ||
+                        "No short answer available."}
+                    </p>
+                    <button
+                      onClick={() => handleViewDetail(item)}
+                      className="inline-block mt-2 text-xs text-blue-600 dark:text-blue-400 hover:underline"
                     >
-                      <h3 className="text-[13px] font-semibold text-slate-900 dark:text-white line-clamp-2">
-                        {item.question} {/* Using top-level question */}
-                      </h3>
-                      <p className="mt-1 text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
-                        {level1Data?.shortAnswer ||
-                          "No short answer available."}
-                      </p>
-                      <Link
-                        to={`/ask-sam/detail/${item.fs_id}`}
-                        className="inline-block mt-2 text-xs text-blue-600 dark:text-blue-400 hover:underline"
-                      >
-                        View expert answer →
-                      </Link>
-                    </div>
-                  );
-                })
+                      View expert answer →
+                    </button>
+                  </div>
+                ))
               )}
             </div>
           </Card>
 
-          {/* You can keep your Stability Reports card or other static content here */}
+          {/* Stability Reports Section (Same to Same) */}
           <Card>
             <div className="flex items-center justify-between mb-3">
               <div>
@@ -108,16 +114,14 @@ const AskSamResults = () => {
                 3 found
               </span>
             </div>
-
             <div className="space-y-3">
               <div className="p-3 border bg-slate-50 dark:bg-slate-900/40 rounded-xl border-slate-200 dark:border-slate-800">
                 <h3 className="text-[13px] font-semibold text-slate-900 dark:text-white">
-                  Staff feel unable to report mistakes, near misses
+                  Staff feel unable to report mistakes
                 </h3>
                 <p className="mt-1 text-[11px] text-slate-600 dark:text-slate-400">
-                  Staff feel unable to report mistakes, near misses, or concerns
-                  due to fear of blame or retaliation, limiting improvement and
-                  learning.
+                  Staff feel unable to report mistakes, near misses, or
+                  concerns...
                 </p>
                 <button className="mt-2 text-xs text-orange-600">
                   Run diagnostic →
@@ -128,8 +132,8 @@ const AskSamResults = () => {
                   Pay Doesn't Match Mixed Abilities
                 </h3>
                 <p className="mt-1 text-[11px] text-slate-600 dark:text-slate-400">
-                  Highly skilled or high performing engineers are paid similarly
-                  to low performers, undermining motivation and retention.
+                  Highly skilled or high performing engineers are paid
+                  similarly...
                 </p>
                 <button className="mt-2 text-xs text-orange-600">
                   Run diagnostic →
@@ -140,9 +144,8 @@ const AskSamResults = () => {
                   Workforce Demographic Risk
                 </h3>
                 <p className="mt-1 text-[11px] text-slate-600 dark:text-slate-400">
-                  An ageing engineering workforce and lack of younger recruits
-                  create long-term risk to critical technical capability and
-                  knowledge retention.
+                  An ageing engineering workforce and lack of younger
+                  recruits...
                 </p>
                 <button className="mt-2 text-xs text-orange-600">
                   Run diagnostic →
@@ -171,12 +174,12 @@ const AskSamResults = () => {
           <span className="text-slate-600 dark:text-slate-300">
             Not quite right? Ask Sam for a tailored answer
           </span>
-          <Link
-            to="/ask-sam/answer"
+          <button
+            onClick={() => answers.length > 0 && handleViewDetail(answers[0])}
             className="ml-auto text-xs bg-blue-600 text-white px-2.5 py-1 rounded hover:bg-blue-700 transition-colors"
           >
             Ask Sam
-          </Link>
+          </button>
         </div>
       </div>
     </div>

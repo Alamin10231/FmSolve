@@ -1,5 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import {
+  Link,
+  useNavigate,
+  useSearchParams,
+  useLocation,
+} from "react-router-dom";
 import { AuthContext } from "@/context/AuthProvider";
 import { requestAskPrelogin } from "@/services/asksam.service";
 
@@ -19,6 +24,7 @@ const AskSamAnswerDetail = ({ answerData }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  const location = useLocation();
   let fsid, question, quick_answer, tags, breadcrumbs;
   if (answerData) {
     ({
@@ -28,6 +34,12 @@ const AskSamAnswerDetail = ({ answerData }) => {
       tags = [],
       breadcrumbs = [],
     } = answerData);
+  } else if (location.state) {
+    question = location.state.question || "";
+    quick_answer = location.state.quick_answer || "";
+    fsid = location.state.fsid;
+    tags = location.state.tags || [];
+    breadcrumbs = [];
   } else {
     question = searchParams.get("question") || "";
     fsid = apiData?.temp_fsid;
@@ -49,7 +61,6 @@ const AskSamAnswerDetail = ({ answerData }) => {
         })
         .finally(() => setLoading(false));
     }
-    
   }, [answerData, question]);
 
   const handleGenerateFullAnswer = () => {
@@ -58,11 +69,13 @@ const AskSamAnswerDetail = ({ answerData }) => {
     if (!user) {
       navigate(
         `/login?fsid=${encodeURIComponent(fsid)}&question=${encodeURIComponent(question || "")}`,
+        { state: { question, quick_answer, tags } },
       );
       return;
     }
     navigate(
       `/ask-sam/answer/full?fsid=${encodeURIComponent(fsid)}&question=${encodeURIComponent(question || "")}`,
+      { state: { question, quick_answer, tags } },
     );
   };
 

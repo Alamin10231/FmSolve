@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useSearchParams, useLocation } from "react-router-dom";
 import { fetchFullAnswerAuthed } from "@/services/asksam.service";
 
 const Chip = ({ children }) => (
@@ -21,15 +21,21 @@ const Section = ({ title, children }) => (
 
 const AskSamFullAnswer = () => {
   const [searchParams] = useSearchParams();
+  const location = useLocation();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [answerData, setAnswerData] = useState(null);
+
+  // State fallback from navigation
+  const stateQuestion = location.state?.question;
+  const stateShortAnswer = location.state?.quick_answer;
+  const stateTags = location.state?.tags;
 
   const lastFetchedFsId = useRef(null);
   useEffect(() => {
     let fsid =
       searchParams.get("fsid") || sessionStorage.getItem("pending_fsid");
-    const question = searchParams.get("question");
+    const question = searchParams.get("question") || stateQuestion;
 
     const storedPermanent = sessionStorage.getItem("current_fsid");
     if (storedPermanent && !searchParams.get("fsid")) {
@@ -37,23 +43,24 @@ const AskSamFullAnswer = () => {
       sessionStorage.removeItem("pending_fsid");
     }
 
-    // Prevent double-fetch: if no fsid, do nothing
-    if (!fsid) {
+    // Ensure fsid is a valid number
+    const validFsid = Number(fsid);
+    if (!validFsid || isNaN(validFsid)) {
       setLoading(false);
-      setError("No answer ID found. Please try again from Ask Sam.");
+      setError("No valid answer ID found. Please try again from Ask Sam.");
       return;
     }
 
     // Prevent duplicate fetch for the same fsid
-    if (lastFetchedFsId.current === String(fsid)) {
+    if (lastFetchedFsId.current === String(validFsid)) {
       return;
     }
-    lastFetchedFsId.current = String(fsid);
+    lastFetchedFsId.current = String(validFsid);
 
     setLoading(true);
     setError(null);
 
-    fetchFullAnswerAuthed(fsid, question)
+    fetchFullAnswerAuthed(validFsid, question)
       .then((data) => {
         setAnswerData(data);
         if (data?.fs_id) {
@@ -66,7 +73,7 @@ const AskSamFullAnswer = () => {
         sessionStorage.removeItem("pending_fsid");
         console.log(
           "AskSam full data fetched. Used fsid:",
-          fsid,
+          validFsid,
           "Permanent fs_id:",
           data?.fs_id,
         );
@@ -107,17 +114,72 @@ const AskSamFullAnswer = () => {
     );
   }
 
-  const tags = answerData?.["level 1"]?.tags || [];
+  const tags =
+    answerData?.["level 1"]?.tags || answerData?.tags || stateTags || [];
   const question =
     answerData?.["level 1"]?.question ||
     answerData?.question ||
+    stateQuestion ||
     "Your Question";
-  const shortAnswer = answerData?.["level 1"]?.shortAnswer || "";
+  const shortAnswer =
+    answerData?.["level 1"]?.shortAnswer || stateShortAnswer || "";
   const valueToFM = answerData?.["level 1"]?.valueToFM || "";
   const whenToUse = answerData?.["level 1"]?.whenToUse || "";
   const detailedAnswer = answerData?.["level 1"]?.detailedAnswer || "";
   const relatedQuestions = answerData?.["level 1"]?.relatedQuestions || [];
   const permanentFsId = answerData?.fs_id;
+
+  if (!answerData && (shortAnswer || question)) {
+    // If backend did not return, but we have state data, show fallback
+    return (
+      <div className="px-4 py-8 sm:py-24">
+        <div className="max-w-4xl mx-auto font-DmSans">
+          {/* Back */}
+          <div className="flex items-center gap-2 mb-3">
+            <Link
+              to="/ask-sam/answer"
+              className="text-xs text-slate-500 hover:text-slate-700 dark:text-slate-400"
+            >
+              ← Back to quick answer
+            </Link>
+          </div>
+
+          {/* Breadcrumb chips */}
+          {tags.length > 0 && (
+            <div className="flex flex-wrap gap-2 mb-3">
+              {tags.map((tag, idx) => (
+                <Chip key={idx}>{tag}</Chip>
+              ))}
+            </div>
+          )}
+
+          {/* Title */}
+          <h1 className="text-xl font-bold leading-snug sm:text-2xl md:text-3xl text-slate-900 dark:text-white">
+            {question}
+          </h1>
+
+          {shortAnswer && <Section title="Quick Answer">{shortAnswer}</Section>}
+
+          <div className="flex items-center gap-3 p-4 mt-6 border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/40 rounded-xl">
+            <img
+              src="/favicon.ico"
+              alt="Sam"
+              className="w-5 h-5 rounded-full"
+            />
+            <span className="text-xs text-slate-600 dark:text-slate-300">
+              Want a diagnostic tailored to your site?
+            </span>
+            <Link
+              to="/ask-sam/stability-reports"
+              className="ml-auto text-xs bg-orange-600 hover:bg-orange-700 text-white px-2.5 py-1 rounded"
+            >
+              Run Stability Report
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="px-4 py-8 sm:py-24">

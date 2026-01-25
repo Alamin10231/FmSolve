@@ -6,6 +6,32 @@ import { Search, Sparkles } from "lucide-react";
 import { requestAskPrelogin, searchAskSam } from "@/services/asksam.service";
 // Results are rendered by parent via onAnswerReceived(data)
 
+const mapAskSamResponse = (res) => {
+  if (!res) return null;
+
+  return {
+    status: res.status || "error",
+
+    question: res.question || "",
+    answer: res.quick_answer || "",
+
+    suggestions: Array.isArray(res.matching_questions)
+      ? res.matching_questions.map((item) => ({
+          id: item.fs_id ?? null,
+          question: item.question ?? "",
+          answer: item.quick_answer ?? "",
+        }))
+      : [],
+
+    // Extra info grouped cleanly
+    meta: {
+      unique: res.unique ?? null,
+      type: res.type ?? null,
+      tempId: res.temp_fsid ?? null,
+    },
+  };
+};
+
 const AskSamLanding = ({
   onSearchResult,
   onAnswerReceived,
@@ -55,7 +81,7 @@ const AskSamLanding = ({
         }
       }
       setShowVideo(false);
-    }, 10000);
+    }, 20000);
     return () => clearTimeout(timer);
   }, []);
 
@@ -67,15 +93,12 @@ const AskSamLanding = ({
     setError(null);
     try {
       const res = await requestAskPrelogin({ question: query });
-      const payload = {
-        fsid: res?.temp_fsid ?? res?.fsid ?? res?.id,
-        question: res?.question ?? query,
-        quickAnswer: res?.quick_answer ?? res?.answer ?? "",
-        title: res?.title,
-        tags: res?.tags ?? [],
-        breadcrumbs: res?.breadcrumbs ?? [],
-      };
-      if (onAnswerReceived) onAnswerReceived(payload);
+
+      const mappedResponse = mapAskSamResponse(res);
+
+      console.log(mappedResponse);
+
+      if (onAnswerReceived) onAnswerReceived(mappedResponse);
     } catch (err) {
       const status = err?.response?.status;
       const msg =
