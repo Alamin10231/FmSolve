@@ -8,17 +8,15 @@ import AskSamAnswerDetail from "./AskSamAnswerDetail";
 const AskSam = () => {
   const [showResults, setShowResults] = useState(false);
   const [hasMatch, setHasMatch] = useState(false);
-  const [answerData, setAnswerData] = useState(null);
+  
 
   const handleSearchResult = (showResult, matchFound) => {
     setShowResults(showResult);
     setHasMatch(matchFound);
   };
-
-  const handleAnswerReceived = (data) => {
-    setAnswerData(data || null);
+  const handleAnswerReceived = () => {
+   
     setShowResults(true);
-    setHasMatch(!!data);
   };
 
   return (
@@ -27,10 +25,12 @@ const AskSam = () => {
         onSearchResult={handleSearchResult}
         onAnswerReceived={handleAnswerReceived}
       />
-      {answerData ? (
-        <AskSamAnswerDetail answerData={answerData} />
-      ) : showResults ? (
-        <div>{hasMatch ? <AskSamStaticResults /> : <Notmatchtext />}</div>
+      {showResults ? (
+        hasMatch ? (
+          <AskSamStaticResults />
+        ) : (
+          <Notmatchtext />
+        )
       ) : (
         <AskSamTools />
       )}

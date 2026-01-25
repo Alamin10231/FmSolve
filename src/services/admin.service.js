@@ -16,3 +16,17 @@ export const getAdminFsidStats = async () => {
   });
   return res.data;
 };
+export const getadminwithoutuid = async () => {
+  const res = await publicAxios.get("superadmin/fmsolve/");
+  return res.data;
+};
+export const getadminfsid = async () => {
+  const res = await publicAxios.get("superadmin/fsids/");
+  return res.data;
+};
+export const getAdminFsidStatsById = async (id) => {
+  const res = await publicAxios.get("superadmin/fsviewViaUser/", {
+    params: { uid: id },
+  });
+  return res.data;
+}

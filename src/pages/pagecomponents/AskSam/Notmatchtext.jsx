@@ -35,6 +35,7 @@ const TargetIcon = () => (
 );
 
 const Notmatchtext = () => {
+  // const [answerData, setAnswerData] = useState(null);
   return (
     <div className="flex items-center justify-center p-6 transition-colors duration-300 bg-white font-DmSans dark:bg-slate-900">
       <div className="w-full max-w-2xl space-y-8 text-center">
@@ -79,22 +80,21 @@ const Notmatchtext = () => {
           </Link>
 
           {/* Option 2: Stability Report */}
-    <Link to="/ask-sam/stability-reports">
-    
-          <button className="flex items-center w-full p-5 text-left transition-all border-2 border-orange-100 rounded-2xl dark:border-orange-900/30 bg-orange-50/50 dark:bg-orange-900/10 hover:bg-orange-50 dark:hover:bg-orange-900/20 group">
-            <div className="p-3 mr-4 transition-transform bg-orange-100 rounded-xl dark:bg-orange-900/40 group-hover:scale-110">
-              <TargetIcon />
-            </div>
-            <div>
-              <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">
-                Generate Stability Report
-              </h3>
-              <p className="text-sm text-slate-500 dark:text-slate-400">
-                Deep diagnostic with action plan
-              </p>
-            </div>
-          </button>
-    </Link>
+          <Link to="/ask-sam/stability-reports">
+            <button className="flex items-center w-full p-5 text-left transition-all border-2 border-orange-100 rounded-2xl dark:border-orange-900/30 bg-orange-50/50 dark:bg-orange-900/10 hover:bg-orange-50 dark:hover:bg-orange-900/20 group">
+              <div className="p-3 mr-4 transition-transform bg-orange-100 rounded-xl dark:bg-orange-900/40 group-hover:scale-110">
+                <TargetIcon />
+              </div>
+              <div>
+                <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">
+                  Generate Stability Report
+                </h3>
+                <p className="text-sm text-slate-500 dark:text-slate-400">
+                  Deep diagnostic with action plan
+                </p>
+              </div>
+            </button>
+          </Link>
         </div>
       </div>
     </div>

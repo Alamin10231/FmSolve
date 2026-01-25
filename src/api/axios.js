@@ -102,7 +102,7 @@ export const baseUrl =
 /* ---------------------------------- */
 const baseConfig = {
   baseURL: baseUrl,
-  timeout: 90000,
+  timeout: 30000,
   withCredentials: true,
   headers: {
     Accept: "application/json",

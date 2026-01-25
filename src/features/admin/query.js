@@ -1,8 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import {
   getAdminBrief,
+  getadminfsid,
   getAdminFsidStats,
+  getAdminFsidStatsById,
   getAdminGraphData,
+  getadminwithoutuid,
 } from "@/services/admin.service";
 import { adminKeys } from "../keys";
 
@@ -22,3 +25,26 @@ export const useAdminFsidStats = (uid, options = {}) =>
     enabled: !!uid,
     ...options,
   });
+
+export const useAdminFsidStatsWithoutUid = (options = {}) => {
+  return useQuery({
+    queryKey: adminKeys.fswithoutid,
+    queryFn: () => getadminwithoutuid(),
+    ...options,
+  });
+};
+export const useAdminFsid = (options = {}) => {
+  return useQuery({
+    queryKey: adminKeys.fsids,
+    queryFn: () => getadminfsid(),
+    ...options,
+  });
+};
+export const useAdminFsidById = (id, options = {}) => {
+  return useQuery({
+    queryKey: adminKeys.fsid(id),
+    queryFn: () => getAdminFsidStatsById(id),
+    enabled: !!id,
+    ...options,
+  });
+};
