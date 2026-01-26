@@ -49,7 +49,7 @@ const Topbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
-  const displayName = (user?.displayName || user?.providerData?.[0]?.displayName || user?.email?.split("@")[0] || "User");
+  const displayName = (user?.displayName || user?.email?.split("@")[0] || "User");
 const initial = displayName.charAt(0).toUpperCase();
 
 
