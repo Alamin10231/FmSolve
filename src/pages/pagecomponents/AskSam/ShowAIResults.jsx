@@ -8,10 +8,9 @@ const Card = ({ children }) => (
   </div>
 );
 
-const AskSamResults = () => {
+export const ShowAIResults = ({ payload }) => {
   const [answers, setAnswers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const getResults = async () => {
@@ -27,15 +26,19 @@ const AskSamResults = () => {
     getResults();
   }, []);
 
-  // Helper function to handle navigation with state
+  const navigate = useNavigate();
+
+  if (!payload) return null;
+
+  const { suggestions = [] } = payload;
+
   const handleViewDetail = (item) => {
     navigate("/ask-sam/answer-detail", {
       state: {
-        fsid: item.fs_id,
+        fsid: item.id,
         question: item.question,
-        quick_answer:
-          item.levels?.[0]?.level1?.shortAnswer || "No short answer available.",
-        tags: item.levels?.[0]?.level1?.tags || [],
+        quick_answer: item.answer,
+        tags: 1,
       },
     });
   };
@@ -65,7 +68,7 @@ const AskSamResults = () => {
                 </p>
               </div>
               <span className="text-[11px] rounded bg-blue-100 text-blue-700 dark:bg-slate-800 dark:text-blue-400 px-2 py-0.5">
-                {answers.length} found
+                {suggestions.length} found
               </span>
             </div>
 
@@ -75,7 +78,7 @@ const AskSamResults = () => {
                   Loading insights...
                 </div>
               ) : (
-                answers.slice(0, 4).map((item) => (
+                suggestions.slice(0, 4).map((item) => (
                   <div
                     key={item.id}
                     className="p-3 border bg-slate-50 dark:bg-slate-900/40 rounded-xl border-slate-200 dark:border-slate-800"
@@ -83,9 +86,8 @@ const AskSamResults = () => {
                     <h3 className="text-[13px] font-semibold text-slate-900 dark:text-white line-clamp-2">
                       {item.question}
                     </h3>
-                    <p className="mt-1 text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
-                      {item.levels?.[0]?.level1?.shortAnswer ||
-                        "No short answer available."}
+                    <p className="mt-1 text-[11px] text-slate-600 dark:text-slate-400">
+                      {item.answer}
                     </p>
                     <button
                       onClick={() => handleViewDetail(item)}
@@ -97,6 +99,24 @@ const AskSamResults = () => {
                 ))
               )}
             </div>
+                <div className="relative flex items-center gap-3 p-3 mt-6 text-xs border md:top-52 bg-slate-50 dark:bg-slate-900/40 border-slate-200 dark:border-slate-800 rounded-xl">
+          <div className="w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center text-[10px] text-white font-bold">
+            S
+          </div>
+          <span className="text-slate-600 dark:text-slate-300">
+            Not quite right? Ask Sam for a tailored answer
+          </span>
+          <button
+            onClick={() => {
+              navigate(
+                `/ask-sam/answer-detail?question=${encodeURIComponent(payload.question || "")}`,
+              );
+            }}
+            className="ml-auto text-xs bg-blue-600 text-white px-2.5 py-1 rounded hover:bg-blue-700 transition-colors"
+          >
+            Ask Sam
+          </button>
+        </div>
           </Card>
 
           {/* Stability Reports Section (Same to Same) */}
@@ -113,6 +133,7 @@ const AskSamResults = () => {
               <span className="text-[11px] rounded bg-slate-100 dark:bg-slate-800 px-2 py-0.5">
                 3 found
               </span>
+              
             </div>
             <div className="space-y-3">
               <div className="p-3 border bg-slate-50 dark:bg-slate-900/40 rounded-xl border-slate-200 dark:border-slate-800">
@@ -163,13 +184,14 @@ const AskSamResults = () => {
                 </button>
               </div>
             </div>
+            
           </Card>
+          
         </div>
 
-     
+        {/* Footer CTA */}
+    
       </div>
     </div>
   );
 };
-
-export default AskSamResults;

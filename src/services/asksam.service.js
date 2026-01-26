@@ -34,11 +34,17 @@ const normalizeFsId = (fsid) => {
   return Number.isFinite(n) ? n : null;
 };
 
-export const fetchFullAnswerAuthed = async (fsid = null, question = null) => {
+export const fetchFullAnswerAuthed = async (
+  fsid = null,
+  question = null,
+  tag = 0,
+) => {
   const payload = {};
 
   const normalized = normalizeFsId(fsid);
   if (normalized != null) payload.fs_id = normalized;
+
+  if (tag) payload.tag = tag;
 
   if (question) payload.question = question;
 

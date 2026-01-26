@@ -37,6 +37,8 @@ const AskSamFullAnswer = () => {
       searchParams.get("fsid") || sessionStorage.getItem("pending_fsid");
     const question = searchParams.get("question") || stateQuestion;
 
+    const tag = searchParams.get("tags") || 0;
+
     const storedPermanent = sessionStorage.getItem("current_fsid");
     if (storedPermanent && !searchParams.get("fsid")) {
       fsid = storedPermanent;
@@ -60,7 +62,7 @@ const AskSamFullAnswer = () => {
     setLoading(true);
     setError(null);
 
-    fetchFullAnswerAuthed(validFsid, question)
+    fetchFullAnswerAuthed(validFsid, question, stateTags)
       .then((data) => {
         setAnswerData(data);
         if (data?.fs_id) {
@@ -187,7 +189,7 @@ const AskSamFullAnswer = () => {
         {/* Back */}
         <div className="flex items-center gap-2 mb-3">
           <Link
-            to="/ask-sam/answer"
+            to="/ask-sam"
             className="text-xs text-slate-500 hover:text-slate-700 dark:text-slate-400"
           >
             ← Back to quick answer

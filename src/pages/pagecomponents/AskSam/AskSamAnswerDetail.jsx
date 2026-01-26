@@ -25,33 +25,32 @@ const AskSamAnswerDetail = ({ answerData }) => {
   const [error, setError] = useState(null);
 
   const location = useLocation();
+
+  console.log("Answer Detail Data:", {
+    answerData,
+    apiData,
+    location: location.state,
+  });
+
   let fsid, question, quick_answer, tags, breadcrumbs;
   if (answerData) {
-    ({
-      fsid,
-      question,
-      quick_answer,
-      tags = [],
-      breadcrumbs = [],
-    } = answerData);
+    ({ fsid, question, quick_answer, tags = 0, breadcrumbs = [] } = answerData);
   } else if (location.state) {
     question = location.state.question || "";
     quick_answer = location.state.quick_answer || "";
     fsid = location.state.fsid;
-    tags = location.state.tags || [];
+    tags = location.state.tags || 0;
     breadcrumbs = [];
   } else {
     question = searchParams.get("question") || "";
     fsid = apiData?.temp_fsid;
     quick_answer = apiData?.quick_answer;
-    tags = [];
+    tags = 0;
     breadcrumbs = [];
   }
 
   useEffect(() => {
     if (!answerData && question) {
-      setLoading(true);
-      setError(null);
       requestAskPrelogin({ question })
         .then((res) => {
           setApiData(res);
@@ -73,10 +72,10 @@ const AskSamAnswerDetail = ({ answerData }) => {
       );
       return;
     }
-    navigate(
-      `/ask-sam/answer/full?fsid=${encodeURIComponent(fsid)}&question=${encodeURIComponent(question || "")}`,
-      { state: { question, quick_answer, tags } },
-    );
+
+    const newUri = `/ask-sam/answer/full?tags=${tags}&fsid=${encodeURIComponent(fsid)}&question=${encodeURIComponent(question || "")}`;
+    console.log("Navigating to full answer:", newUri);
+    navigate(newUri, { state: { question, quick_answer, tags } });
   };
 
   if (loading) {

@@ -81,7 +81,7 @@ const AskSamLanding = ({
         }
       }
       setShowVideo(false);
-    }, 20000);
+    }, 10000);
     return () => clearTimeout(timer);
   }, []);
 
@@ -196,11 +196,19 @@ const AskSamLanding = ({
                   if (onSearchResult) onSearchResult(false, false);
                 }
               }}
-              placeholder="Client complaints are increasing"
-              className="py-6 pl-10 pr-3 text-gray-900 bg-gray-100 border-gray-300 placeholder:text-gray-400 dark:bg-slate-950 dark:text-slate-200 dark:border-slate-800"
+              placeholder="Client complaints are increasing "
+              className={`py-6 pl-10 pr-3 text-gray-900 bg-gray-100 border-gray-300 placeholder:text-gray-400 dark:bg-slate-950 dark:text-slate-200 dark:border-slate-800`
+
+
+                
+              }
             />
+
+            
             {showSuggestions && suggestions.length > 0 && (
-              <ul className="absolute left-0 right-0 z-20 mt-2 overflow-hidden text-left bg-white border shadow-lg rounded-xl dark:bg-slate-900 border-slate-200 dark:border-slate-800">
+              <ul className={`absolute left-0 right-0 z-20 mt-2 overflow-hidden text-left bg-white  rounded-xl dark:bg-slate-900  dark:border-slate-800` +(showVideo
+          ? `bg-red-900 text-black backdrop-blur-sm dark:bg-[#0b0f1a]/70 dark:text-white dark:backdrop-blur-sm`
+          : `bg-red-800 text-gray-900 dark:bg-[#0b0f1a] dark:text-white`)}>
                 {suggestions.map((s, idx) => (
                   <li
                     key={idx}
@@ -223,7 +231,7 @@ const AskSamLanding = ({
             disabled={loading}
             className="
               px-6 py-6 h-[52px]
-              text-white bg-orange-600 hover:bg-orange-700
+              dark:text-white  bg-orange-600 hover:bg-orange-700
               rounded-xl font-bold flex items-center gap-2
             "
           >

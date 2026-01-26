@@ -3,43 +3,32 @@ import AskSamLanding from "./AskSamLanding";
 import AskSamTools from "./AskSamTools";
 import AskSamStaticResults from "./AskSamStaticResults";
 import Notmatchtext from "./Notmatchtext";
+import { ShowAIResults } from "./ShowAIResults";
 
 const AskSam = () => {
   const [showResults, setShowResults] = useState(false);
-  const [hasMatch, setHasMatch] = useState(false);
-  const [selectedSuggestion, setSelectedSuggestion] = useState(null);
   const [lastQuery, setLastQuery] = useState("");
-  const [suggestions, setSuggestions] = useState([]);
+
+  const [payload, setPayload] = useState(null);
 
   // Called from AskSamLanding to update suggestions list
   const handleSuggestionClick = () => {};
-  // Called from AskSamLanding to update suggestions list
   const handleSuggestionsUpdate = (list) => {
-    setSuggestions(list);
+    console.log("[LOG] From handle suggestions update", list);
   };
 
   // Called when user submits a search
-  const handleSearchResult = (showResult, matchFound) => {
+  const handleSearchResult = (showResult) => {
     setShowResults(showResult);
-    setHasMatch(matchFound);
-    setSelectedSuggestion(null);
+    setPayload(null);
   };
 
   // Called when answer is received (Ask Sam button submit)
   const handleAnswerReceived = (payload) => {
+    console.log("[LOG] From handle answer received", payload);
     setShowResults(true);
     setLastQuery(payload?.question || "");
-
-    console.log("PAYLOAD", payload);
-
-    // Check if the submitted query matches any suggestion (case-insensitive)
-    const match = suggestions.some(
-      (s) =>
-        s.trim().toLowerCase() ===
-        (payload?.question || "").trim().toLowerCase(),
-    );
-    setHasMatch(match);
-    setSelectedSuggestion(match ? payload?.question || "" : null);
+    setPayload(payload);
   };
 
   return (
@@ -51,14 +40,15 @@ const AskSam = () => {
         onSuggestionsUpdate={handleSuggestionsUpdate}
       />
       {showResults ? (
-        hasMatch ? (
-          <AskSamStaticResults suggestion={selectedSuggestion} />
+        payload.suggestions.length > 0 ? (
+          <ShowAIResults payload={payload} />
         ) : (
           <Notmatchtext query={lastQuery} />
         )
       ) : (
         <AskSamTools />
       )}
+      {/* <AskSamStaticResults payload={payload} /> */}
     </div>
   );
 };
