@@ -31,3 +31,11 @@ export const getAdminFsidStatsById = async (id) => {
   return res.data;
 }
 
+export const getAdminUserList = async (uid) => {
+  // Passing uid as an object property so Axios converts it to ?uid=value
+  const res = await publicAxios.get("superadmin/fsviewViaUser/", { 
+    params: { uid } 
+  });
+  return res.data;
+}
+

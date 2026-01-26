@@ -40,7 +40,8 @@ import AskSamAnswerDetail from "@/pages/pagecomponents/AskSam/AskSamAnswerDetail
 import AskSamFullAnswer from "@/pages/pagecomponents/AskSam/AskSamFullAnswer";
 import Profile from "@/pages/user/Profile";
 import Setting from "@/pages/user/Setting";
-import UserManagment from "@/pages/admin/UserManagment";
+import { UserManagment } from "@/pages/admin/UserManagment";
+// import UserManagment from "@/pages/admin/UserManagment";
 
 // jimport StabilityReports from "@/pages/pagecomponents/AskSam/StabilityReports";
 

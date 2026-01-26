@@ -182,12 +182,18 @@ export const FmSolveId = () => {
 
               {/* Actions */}
               <div className="flex items-center gap-3">
-                <button
+                {/* <button
                   type="button"
                   onClick={() => handleView(item)}
                   className="flex items-center justify-center flex-1 gap-2 py-2 text-sm font-semibold text-white bg-blue-700 rounded-md hover:bg-blue-800"
                 >
                   <Eye className="w-4 h-4" /> View
+                </button> */}
+                <button
+                  onClick={() => navigate(`/admin/fmsolveid/${item.uid}`)}
+                  className="flex items-center justify-center flex-1 gap-2 py-2 text-sm font-semibold text-white bg-blue-700 rounded-md hover:bg-blue-800"
+                >
+                  View 
                 </button>
                 <button
                   type="button"
